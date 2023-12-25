@@ -23,10 +23,9 @@ export const authOptions: AuthOptions = {
                 }
             },
             async authorize(credentials, req) {
-
                 connect()
-                const user = await User.findOne{ email: credentials?.email })
-
+                console.log(credentials?.email)
+                const user = await User.findOne({ email: credentials?.email })
                 if (user) {
                     return user
                 } else {

@@ -1,15 +1,14 @@
 'use client';
-import React from 'react'
 import { useState } from 'react';
 import Link from 'next/link'
 import Image from 'next/image';
 import SignInBtn from './signInBtn';
 import SignOutBtn from './signOutBtn';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 function Header() {
-
+  
   const [isOpen, setIsOpen] = useState(false);
-
   return (<>
     <div className="bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
       <div className="flex items-center justify-between px-4 py-3 sm:p-0">
@@ -33,8 +32,8 @@ function Header() {
         <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">List your property</Link>
         <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">Trips</Link>
         <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">About</Link>
-        <SignOutBtn />
-        <SignInBtn />
+        {localStorage.getItem('email') != null && <SignOutBtn />}
+        {localStorage.getItem('email') == null && <SignInBtn />}
       </nav>
     </div>
   </>

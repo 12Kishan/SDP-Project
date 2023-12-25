@@ -26,6 +26,7 @@ export default function Login() {
                 const response = res.data
 
                 if (response.status == 200) {
+                    localStorage.setItem('email', authState?.email)
                     signIn("credentials", {
                         email: authState.email,
                         password: authState.password,
