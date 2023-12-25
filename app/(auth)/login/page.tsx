@@ -18,6 +18,14 @@ export default function Login() {
         password: ''
     })
 
+    const googleSignin = async ()=>{
+        await signIn('google',{
+            callbackUrl:"/",
+            redirect:true
+        })
+        localStorage.setItem('email', authState?.email)
+    }
+
     const submit = () => {
         console.log(authState)
         axios.post('/api/auth/login', authState)
@@ -105,17 +113,19 @@ export default function Login() {
                                 <div>
                                     <button
                                         type="button"
-                                        className={`inline-flex w-full items-center justify-center border-solid border-2 hover:bg-white hover:text-gray-900 rounded-full bg-transparent px-3.5 py-2.5 font-semibold leading-7 bg-white ${loading ? "bg-gray-500" : "bg-transparent"}`} onClick={submit}
+                                        className={`inline-flex w-full items-center justify-center text-white border-solid border-2 hover:bg-white hover:text-gray-900 rounded-full bg-transparent px-3.5 py-2.5 font-semibold leading-7 ${loading ? "bg-gray-500" : "bg-transparent"}`} onClick={submit}
                                     >
                                         {loading ? "Loading..." : "Sign In"}
                                     </button>
                                 </div>
                             </div>
                         </form>
+                        <p className='mt-3 text-center text-white'>-- OR --</p>
                         <div className="mt-3 space-y-3">
                             <button
                                 type="button"
-                                className="inline-flex w-full items-center justify-center border-solid border-2 bg-white text-gray-900 rounded-full hover:bg-transparent px-3.5 py-2.5 mt-2 font-semibold leading-7 hover:text-white"
+                                className="inline-flex w-full items-center justify-center border-solid border-2 bg-white text-gray-900 rounded-full hover:bg-transparent px-3.5 py-2.5 font-semibold leading-7 hover:text-white"
+                                onClick={googleSignin}
                             >
                                 <span className="mr-2 inline-block">
                                     <svg

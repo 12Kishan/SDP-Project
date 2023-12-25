@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 export default function Register() {
 
@@ -16,6 +17,14 @@ export default function Register() {
         password: '',
         password_confirmation: ''
     })
+
+    const googleSignin = async () => {
+        await signIn('google', {
+            callbackUrl: "/",
+            redirect: true
+        })
+        localStorage.setItem('email', authState?.email)
+    }
 
     const [loading, setLoading] = useState<boolean>(false)
 
@@ -143,6 +152,7 @@ export default function Register() {
                             <button
                                 type="button"
                                 className="inline-flex w-full items-center justify-center border-solid border-2 bg-white text-gray-900 rounded-full hover:bg-transparent px-3.5 py-2.5 mt-0.5 font-semibold leading-7 hover:text-white"
+                                onClick={googleSignin}
                             >
                                 <span className="mr-2 inline-block">
                                     <svg

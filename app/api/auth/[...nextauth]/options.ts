@@ -2,11 +2,32 @@ import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connect } from "@/app/database/mongo.config";
 import { User } from "@/app/model/user";
+import GoogleProvider from "next-auth/providers/google"
+import NextAuth from "next-auth/next";
 
 export const authOptions: AuthOptions = {
     pages: {
         signIn: '/login',
         // newUser: '/home'
+    },
+    callbacks:{
+        async signIn({user, account, profile, email, credentials}){
+            try{
+                connect()
+                const findUser = await User.findOne({ email: user.email })
+                if (findUser) {
+                    return true;
+                }
+                await User.create({
+                    name: user.name,
+                    email: user.email
+                })
+                return true
+            }catch(error){
+                console.log("error in google signin : ", error)
+                return false
+            }
+        }
     },
     providers: [
         CredentialsProvider({
@@ -31,7 +52,11 @@ export const authOptions: AuthOptions = {
                 } else {
                     return null
                 }
-            }
+            },
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
         })
     ]
 }
