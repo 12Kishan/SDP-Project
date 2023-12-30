@@ -5,11 +5,10 @@ import vine, { errors } from "@vinejs/vine";
 import ErrorReporter from "@/validator/ErrorReporter"
 import bcrypt from "bcryptjs"
 import { User } from "@/app/model/user";
-import { messages } from "@vinejs/vine/defaults";
 
 connect();
 
-export async function POST(req: NextRequest) {
+export async function POST(req) {
     try {
         const body = await req.json()
 

@@ -143,7 +143,7 @@ export default function Register() {
                                         ${loading ? "bg-gray-500" : "bg-transparent"}`}
                                         onClick={submit}
                                     >
-                                        {loading ? "Loading..." : "Sign Up"}
+                                        {loading ? "Loading" : "Sign Up"}
                                     </button>
                                 </div>
                             </div>

@@ -2,12 +2,12 @@
 import { useState } from 'react';
 import Link from 'next/link'
 import Image from 'next/image';
-import SignInBtn from './signInBtn';
-import SignOutBtn from './signOutBtn';
-import { BrowserRouter as Router } from 'react-router-dom';
+import SignInBtn from '../Buttons/signInBtn';
+import SignOutBtn from '../Buttons/signOutBtn';
+import { useSession } from 'next-auth/react';
 
 function Header() {
-  
+  const {data} = useSession()
   const [isOpen, setIsOpen] = useState(false);
   return (<>
     <div className="bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
@@ -29,11 +29,13 @@ function Header() {
         </div>
       </div>
       <nav className={`${isOpen ? 'block' : 'hidden'} px-2 pt-2 pb-4 sm:flex sm:p-0 items-center`}>
-        <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">List your property</Link>
-        <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">Trips</Link>
-        <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">About</Link>
-        {localStorage.getItem('email') != null && <SignOutBtn />}
-        {localStorage.getItem('email') == null && <SignInBtn />}
+        <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">Quiz</Link>
+        <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">Service</Link>
+        <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">About Us</Link>
+        <SignOutBtn />
+        <SignInBtn />
+        {/* {localStorage.getItem('email') != null && <SignOutBtn />}
+        {localStorage.getItem('email') == null && <SignInBtn />} */}
       </nav>
     </div>
   </>

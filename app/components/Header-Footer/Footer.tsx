@@ -3,36 +3,36 @@ import React from 'react'
 function Footer() {
     return (
         <footer>
-            <section className="bg-gray-900 text-white">
+            <section className="bg-gray-800 text-white">
                 <div className="max-w-screen-xl px-4 py-12 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8">
                     <nav className="flex flex-wrap justify-center -mx-5 -my-2">
                         <div className="px-5 py-2">
-                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-800 p-2">
+                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-900 p-2">
                                 About
                             </a>
                         </div>
                         <div className="px-5 py-2">
-                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-800 p-2">
+                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-900 p-2">
                                 Blog
                             </a>
                         </div>
                         <div className="px-5 py-2">
-                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-800 p-2">
+                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-900 p-2">
                                 Team
                             </a>
                         </div>
                         <div className="px-5 py-2">
-                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-800 p-2">
+                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-900 p-2">
                                 Pricing
                             </a>
                         </div>
                         <div className="px-5 py-2">
-                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-800 p-2">
+                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-900 p-2">
                                 Contact
                             </a>
                         </div>
                         <div className="px-5 py-2">
-                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-800 p-2">
+                            <a href="#" className="text-base leading-6 text-white font-semibold rounded hover:bg-gray-900 p-2">
                                 Terms
                             </a>
                         </div>

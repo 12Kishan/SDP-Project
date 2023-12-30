@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mantine/core": "^7.3.2",
+    "@mantine/hooks": "^7.3.2",
     "@types/bcryptjs": "^2.4.6",
     "@vinejs/vine": "^1.7.0",
     "axios": "^1.6.2",

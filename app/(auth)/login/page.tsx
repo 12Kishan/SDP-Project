@@ -7,7 +7,6 @@ import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { signIn } from 'next-auth/react';
 
-
 export default function Login() {
 
     const param = useSearchParams()
@@ -27,6 +26,7 @@ export default function Login() {
     }
 
     const submit = () => {
+        setLoading(true)
         console.log(authState)
         axios.post('/api/auth/login', authState)
             .then((res) => {
@@ -115,7 +115,7 @@ export default function Login() {
                                         type="button"
                                         className={`inline-flex w-full items-center justify-center text-white border-solid border-2 hover:bg-white hover:text-gray-900 rounded-full bg-transparent px-3.5 py-2.5 font-semibold leading-7 ${loading ? "bg-gray-500" : "bg-transparent"}`} onClick={submit}
                                     >
-                                        {loading ? "Loading..." : "Sign In"}
+                                        {loading ? "Loading" : "Sign Up"}
                                     </button>
                                 </div>
                             </div>

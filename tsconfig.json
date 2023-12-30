@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/database/db.js"
-  ],
+, "app/api/auth/register/route.js", "app/model/user.js", "app/api/auth/[...nextauth]/options.ts"  ],
   "exclude": [
     "node_modules"
   ]
