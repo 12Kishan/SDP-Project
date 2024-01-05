@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
                 }
             }, { status: 200 })
         }
-
         return NextResponse.json(output);
     } catch (err) {
         if (err instanceof errors.E_VALIDATION_ERROR) {

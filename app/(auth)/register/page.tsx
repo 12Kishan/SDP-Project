@@ -1,23 +1,32 @@
 'use client';
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import { passwordStrength } from 'check-password-strength'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Register() {
 
     const router = useRouter()
 
+    {/* States */ }
+    const [loading, setLoading] = useState<boolean>(false)
+    // const [errors, setErrors] = useState<registerError>({})
     const [authState, setAuthState] = useState({
         name: '',
         email: '',
         password: '',
         password_confirmation: ''
     })
+    const [password, setPassword] = useState("")
+    const [message, setMessage] = useState("")
 
+    {/* Functions */ }
     const googleSignin = async () => {
         await signIn('google', {
             callbackUrl: "/",
@@ -26,28 +35,63 @@ export default function Register() {
         localStorage.setItem('email', authState?.email)
     }
 
-    const [loading, setLoading] = useState<boolean>(false)
+    const onPasswordChange = (e: any) => {
+        setAuthState({ ...authState, password: e.target.value })
+        setPassword(e.target.value)
+    }
 
-    const [errors, setErrors] = useState<registerError>({})
+    useEffect(() => {
+        if (password)
+            setMessage(passwordStrength(password).value)
+    }, [password])
 
     const submit = async () => {
         setLoading(true)
-        console.log('auth state : ', authState)
-        await axios.post('/api/auth/register', authState)
-            .then((res) => {
-                setLoading(false)
-                const response = res.data
+        if (message === 'Strong') {
+            await axios.post('/api/auth/register', authState)
+                .then((res) => {
+                    setLoading(false)
+                    const response = res.data
+                    if (response.status == 200) {
+                        displaySuccessToast(response.message?.toLowerCase())
+                        setTimeout(() => {
+                            router.push(`/login`)
+                        }, 1000);
+                    } else if (response?.status == 400) {
+                        for (const key in response.errors) {
+                            if (response.errors.hasOwnProperty(key)) {
+                                const errorMessage = response.errors[key].toLowerCase();
+                                displayWarningToast(`${errorMessage}`);
+                            }
+                        }
+                    }
+                })
+                .catch((err) => {
+                    setLoading(false)
+                    displayErrorToast("Something went wrong")
+                })
+        } else {
+            setLoading(false)
+            displayWarningToast('Use strong password')
+        }
+    }
 
-                if (response.status == 200) {
-                    router.push(`/login?message=${response.message}`)
-                } else if (response?.status == 400) {
-                    setErrors(response?.errors)
-                }
-            })
-            .catch((err) => {
-                setLoading(false)
-                console.log("Something went wrong")
-            })
+    const displayErrorToast = (str: String) => {
+        toast.error(str, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+        })
+    }
+
+    const displayWarningToast = (str: String) => {
+        toast.warning(str, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+        })
+    }
+
+    const displaySuccessToast = (str: String) => {
+        toast.success(str, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+        })
     }
 
     return (
@@ -85,7 +129,6 @@ export default function Register() {
                                             type="text"
                                             placeholder="Username" onChange={(e) => { setAuthState({ ...authState, name: e.target.value }) }}
                                         ></input>
-                                        <span className='text-red-400 text-xs'>{errors?.name}</span>
                                     </div>
                                 </div>
                                 <div>
@@ -100,7 +143,6 @@ export default function Register() {
                                             placeholder="Email"
                                             onChange={(e) => { setAuthState({ ...authState, email: e.target.value }) }}
                                         ></input>
-                                        <span className='text-red-400 text-xs'>{errors?.email}</span>
                                     </div>
                                 </div>
                                 <div>
@@ -109,15 +151,17 @@ export default function Register() {
                                             {' '}
                                             Password{' '}
                                         </label>
+                                        {/* Justified here */}
+                                        <span className='text-gray-400 text-xs'>{message ? `Password is ${message.toLowerCase()}` : ''}</span>
                                     </div>
                                     <div className="mt-1">
                                         <input
                                             className="flex h-10 w-full rounded-md border text-white border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                            value={password}
                                             type="password"
                                             placeholder="Password"
-                                            onChange={(e) => { setAuthState({ ...authState, password: e.target.value }) }}
+                                            onChange={onPasswordChange}
                                         ></input>
-                                        <span className='text-red-400 text-xs'>{errors?.password}</span>
                                     </div>
                                 </div>
                                 <div>
@@ -170,6 +214,7 @@ export default function Register() {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </section>
     )
 }

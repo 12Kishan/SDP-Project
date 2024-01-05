@@ -3,53 +3,69 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { signIn } from 'next-auth/react';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
 
-    const param = useSearchParams()
     const [loading, setLoading] = useState<boolean>(false)
-    const [errors, setErrors] = useState<loginError>({})
+    // const [errors, setErrors] = useState<loginError>({})
     const [authState, setAuthState] = useState({
         email: '',
         password: ''
     })
 
-    const googleSignin = async ()=>{
-        await signIn('google',{
-            callbackUrl:"/",
-            redirect:true
+    const googleSignin = async () => {
+        await signIn('google', {
+            callbackUrl: "/",
+            redirect: true
         })
-        localStorage.setItem('email', authState?.email)
+        // localStorage.setItem('email', authState?.email)
     }
 
     const submit = () => {
         setLoading(true)
-        console.log(authState)
-        axios.post('/api/auth/login', authState)
-            .then((res) => {
+         axios.post('/api/auth/login', authState)
+             .then( (res) => {
                 setLoading(false)
                 const response = res.data
 
                 if (response.status == 200) {
-                    localStorage.setItem('email', authState?.email)
-                    signIn("credentials", {
+                     signIn("credentials", {
                         email: authState.email,
                         password: authState.password,
-                        callbackUrl: '/',
+                        callbackUrl: '/dashboard',
                         redirect: true
                     })
                 } else if (response?.status == 400) {
-                    setErrors(response?.errors)
+                    for (const key in response.errors) {
+                        if (response.errors.hasOwnProperty(key)) {
+                            const errorMessage = response.errors[key].toLowerCase();
+                            displayWarningToast(`${errorMessage}`);
+                        }
+                    }
                 }
             })
             .catch((err) => {
                 setLoading(false)
-                console.log("Something went wrong")
+                displayErrorToast("Something went wrong")
             })
     }
+
+    const displayErrorToast = (str: String) => {
+        toast.error(str, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+        })
+    }
+
+    const displayWarningToast = (str: String) => {
+        toast.warning(str, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+        });
+    }
+
     return (
         <section>
             <div className="flex items-center justify-center px-4 sm:px-6 h-screen sm:py-16 lg:px-8 lg:py-24">
@@ -73,7 +89,6 @@ export default function Login() {
                                 Create a free account
                             </Link>
                         </p>
-                        {param.get("message") ? <div className='bg-green-500 w-full mt-6 py-2 px-2 rounded-md text-center items-center text-gray-900 text-xs font-bold'>{param.get("message")}</div> : <></>}
                         <form action="#" method="POST" className="mt-8">
                             <div className="space-y-4">
                                 <div>
@@ -87,7 +102,6 @@ export default function Login() {
                                             type="email"
                                             placeholder="Email" onChange={(e) => { setAuthState({ ...authState, email: e.target.value }) }}
                                         ></input>
-                                        <span className='text-red-400 text-xs'>{errors?.email}</span>
                                     </div>
                                 </div>
                                 <div>
@@ -107,7 +121,6 @@ export default function Login() {
                                             type="password"
                                             placeholder="Password" onChange={(e) => { setAuthState({ ...authState, password: e.target.value }) }}
                                         ></input>
-                                        <span className='text-red-400 text-xs'>{errors?.password}</span>
                                     </div>
                                 </div>
                                 <div>
@@ -115,7 +128,7 @@ export default function Login() {
                                         type="button"
                                         className={`inline-flex w-full items-center justify-center text-white border-solid border-2 hover:bg-white hover:text-gray-900 rounded-full bg-transparent px-3.5 py-2.5 font-semibold leading-7 ${loading ? "bg-gray-500" : "bg-transparent"}`} onClick={submit}
                                     >
-                                        {loading ? "Loading" : "Sign Up"}
+                                        {loading ? "Loading" : "Sign In"}
                                     </button>
                                 </div>
                             </div>
@@ -143,6 +156,7 @@ export default function Login() {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </section>
     )
 }
