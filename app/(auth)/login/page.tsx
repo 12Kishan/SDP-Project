@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import axios from 'axios';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -27,13 +27,13 @@ export default function Login() {
 
     const submit = () => {
         setLoading(true)
-         axios.post('/api/auth/login', authState)
-             .then( (res) => {
+        axios.post('/api/auth/login', authState)
+            .then((res) => {
                 setLoading(false)
                 const response = res.data
 
                 if (response.status == 200) {
-                     signIn("credentials", {
+                    signIn("credentials", {
                         email: authState.email,
                         password: authState.password,
                         callbackUrl: '/dashboard',
