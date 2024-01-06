@@ -17,8 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="shortcut icon" href="/logo.png" />
+      </head>
       <body className={inter.className}>
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <NextAuthProvider>
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
   )
