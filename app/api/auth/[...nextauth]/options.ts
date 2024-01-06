@@ -7,10 +7,10 @@ import GoogleProvider from "next-auth/providers/google"
 connect()
 
 export const authOptions: AuthOptions = {
-    pages: {
-        signIn: '/login',
-        // newUser: '/home'
-    },
+    // pages: {
+    //     signIn: '/login',
+    //     // newUser: '/home'
+    // },
     callbacks:{
         async signIn({user, account, profile, email, credentials}){
             try{

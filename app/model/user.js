@@ -1,30 +1,35 @@
 import mongoose, { Schema } from "mongoose";
 
-// const modelName = "User";
-
-// // Check if the model already exists
-// const existingModel = mongoose.modelNames().includes(modelName);
 
 const userSchema = new Schema({
-    name: {
-        type: String,
-        required: [true, "name required"]
-    },
-    email: {
-        type: String,
-        required: [true, "email required"],
-        unique: true,
-        trim: true
-    },
-    password: {
-        type: String,
-        required: [false, "password required"]
-    },
-    isAdmin: {
-        type: Boolean,
-        default: false
-    },
+    name: String,
+    email: { type: String, unique: true },
+    password: String,
+    emailVerified: Date,
+    image: String,
+    accounts: [{ type: Schema.Types.ObjectId, ref: 'Account' }],
+    sessions: [{ type: Schema.Types.ObjectId, ref: 'Session' }],
 });
 
-// export const User = existingModel ? mongoose.model(modelName) : mongoose.model(modelName, userSchema);
+// const userSchema = new Schema({
+//     name: {
+//         type: String,
+//         required: [true, "name required"]
+//     },
+//     email: {
+//         type: String,
+//         required: [true, "email required"],
+//         unique: true,
+//         trim: true
+//     },
+//     password: {
+//         type: String,
+//         required: [false, "password required"]
+//     },
+//     isAdmin: {
+//         type: Boolean,
+//         default: false
+//     },
+// });
+
 export const User = mongoose.models.Users || mongoose.model("Users", userSchema);
