@@ -7,15 +7,21 @@ import { AiOutlineHome } from "react-icons/ai";
 import { AiOutlineEdit } from "react-icons/ai";
 import { AiOutlineHistory } from "react-icons/ai";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { FiLogOut } from "react-icons/fi";
 import Home from '../components/dashboardComponents/Home';
 import Quiz from '../components/dashboardComponents/Quiz';
 import GenerateQuiz from '../components/dashboardComponents/GenerateQuiz';
 import History from '../components/dashboardComponents/History';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import SignOutDashboard from '../components/dashboardComponents/SignOutDashboard';
+import { useRouter } from 'next/navigation';
 
 function Dashboard() {
 
+    const { data } = useSession()
+    if(!data){
+        const router = useRouter()
+        router.push('/')
+    }
     const [open, setOpen] = useState(true);
     const [selectedMenu, setSelectedMenu] = useState('Home');
 
@@ -24,12 +30,13 @@ function Dashboard() {
         { title: "Quiz", icon: AiOutlineEdit, gap: true },
         { title: "Generate Quiz", icon: AiOutlinePlusCircle },
         { title: "History", icon: AiOutlineHistory, gap: true },
-        { title: "Log Out ", icon: FiLogOut, gap: true },
+        // { title: "Log Out ", icon: FiLogOut, gap: true },
     ];
 
     const handleMenuClick = (title: any) => {
         setSelectedMenu(title);
     }
+    
     const renderContent = () => {
         switch (selectedMenu) {
             case 'Home':
@@ -79,6 +86,7 @@ function Dashboard() {
                             </span>
                         </li>
                     ))}
+                    <li><SignOutDashboard myBool = {open}/></li>
                 </ul>
             </div>
             <div className="h-screen flex-1 p-7">

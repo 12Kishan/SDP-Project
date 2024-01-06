@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
     "@mantine/core": "^7.3.2",
     "@mantine/hooks": "^7.3.2",
     "@types/bcryptjs": "^2.4.6",
@@ -16,6 +19,7 @@
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
     "check-password-strength": "^2.0.7",
+    "framer-motion": "^10.17.9",
     "lucide-react": "^0.306.0",
     "mongoose": "^8.0.3",
     "next": "14.0.4",
