@@ -1,8 +1,13 @@
+import { useSession } from 'next-auth/react'
 import React from 'react'
 
 function Home() {
-  return (
-    <div>Home</div>
+  const {data} = useSession()
+  return (<>
+      <div>Home</div>
+      <br/>
+      {data?.user?.email}
+    </>
   )
 }
 
