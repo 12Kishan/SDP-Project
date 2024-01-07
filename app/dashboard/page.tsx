@@ -13,15 +13,11 @@ import GenerateQuiz from '../components/dashboardComponents/GenerateQuiz';
 import History from '../components/dashboardComponents/History';
 import { signOut, useSession } from 'next-auth/react';
 import SignOutDashboard from '../components/dashboardComponents/SignOutDashboard';
-import { useRouter } from 'next/navigation';
+
 
 function Dashboard() {
 
-    const { data } = useSession()
-    if(!data){
-        const router = useRouter()
-        router.push('/')
-    }
+
     const [open, setOpen] = useState(true);
     const [selectedMenu, setSelectedMenu] = useState('Home');
 

@@ -15,8 +15,8 @@ export async function POST(req) {
         const validator = vine.compile(registerSchema)
         validator.errorReporter = () => new ErrorReporter()
         const output = await validator.validate(body)
-        console.log("Inside......",output.email)
-        //checking email if there is already exist or not
+        console.log("Inside......", output.email)
+            //checking email if there is already exist or not
         const user = await User.findOne({ email: output.email })
         if (user) {
             return NextResponse.json({

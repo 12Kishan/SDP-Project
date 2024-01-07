@@ -110,7 +110,7 @@ export default function Login() {
                                             {' '}
                                             Password{' '}
                                         </label>
-                                        <a href="#" title="" className="text-sm font-semibold text-white hover:underline">
+                                        <a href="/forgot-password" title="" className="text-sm font-semibold text-white hover:underline">
                                             {' '}
                                             Forgot password?{' '}
                                         </a>

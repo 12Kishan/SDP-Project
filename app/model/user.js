@@ -9,6 +9,7 @@ const userSchema = new Schema({
     image: String,
     accounts: [{ type: Schema.Types.ObjectId, ref: 'Account' }],
     sessions: [{ type: Schema.Types.ObjectId, ref: 'Session' }],
+    password_reset: String,
 });
 
 // const userSchema = new Schema({
