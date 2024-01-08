@@ -19,7 +19,7 @@ export default function Login() {
 
     const googleSignin = async () => {
         await signIn('google', {
-            callbackUrl: "/",
+            callbackUrl: "/dashboard",
             redirect: true
         })
         // localStorage.setItem('email', authState?.email)

@@ -49,7 +49,7 @@ function Dashboard() {
     };
 
     return (
-        <div className="flex">
+        <div className="flex h-screen">
             <div
                 className={` ${open ? "w-72" : "w-20"
                     } bg-gray-900 h-screen p-5  pt-5 relative duration-300`}
@@ -83,8 +83,7 @@ function Dashboard() {
                     <li><SignOutDashboard myBool = {open}/></li>
                 </ul>
             </div>
-            <div className="h-screen flex-1 p-7">
-                <h1 className="text-2xl mb-5 font-semibold ">{selectedMenu} Page</h1>
+            <div className="h-screen flex-1 pt-20">
                 {renderContent()}
             </div>
         </div>

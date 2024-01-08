@@ -29,6 +29,9 @@ export const authOptions: AuthOptions = {
                 return false
             }
         },
+        async jwt({token}){
+            return token
+        },
         async session({ session, token, user }) {
             console.log(session)
             return session
