@@ -7,13 +7,16 @@ import GoogleProvider from "next-auth/providers/google"
 connect()
 
 export const authOptions: AuthOptions = {
+    session: {
+        strategy: "jwt"
+    },
     pages: {
         signIn: '/login',
         // newUser: '/home'
     },
-    callbacks:{
-        async signIn({user, account, profile, email, credentials}){
-            try{
+    callbacks: {
+        async signIn({ user, account, profile, email, credentials }) {
+            try {
                 console.log(profile)
                 const findUser = await User.findOne({ email: user.email })
                 if (findUser) {
@@ -24,12 +27,12 @@ export const authOptions: AuthOptions = {
                     email: user.email
                 })
                 return true
-            }catch(error){
+            } catch (error) {
                 console.log("error in google signin : ", error)
                 return false
             }
         },
-        async jwt({token}){
+        async jwt({ token }) {
             return token
         },
         async session({ session, token, user }) {
