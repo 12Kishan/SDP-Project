@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server"
 import { quizSchema } from "@/validator/quizSchema"
 import { ZodError } from "zod"
-import { strict_output } from "@/app/lib/gpt"
-import { getServerSession } from "next-auth"
-import { authOptions } from "../auth/[...nextauth]/options"
-import { requestToBodyStream } from "next/dist/server/body-streams"
 import generate from "@/app/lib/myGpt"
 
 export async function POST(req: Request, res: Response) {
@@ -27,14 +23,14 @@ export async function POST(req: Request, res: Response) {
 
         // generating blank questions.
         if (type === "blanks") {
-            questions = await strict_output(
-                'You are a helpful AI that is able to generate a pair of questions and answers, the length of answer should not exceed 15 words, Store all the pairs of quations and answers in JSON array.',
-                new Array(amount).fill(`You have to generate random ${difficulty} level open-ended question about ${topic}`),
-                {
-                    question: 'question',
-                    answer: 'answer with max length of 15 words.'
-                }
-            )
+            // questions = await strict_output(
+            //     'You are a helpful AI that is able to generate a pair of questions and answers, the length of answer should not exceed 15 words, Store all the pairs of quations and answers in JSON array.',
+            //     new Array(amount).fill(`You have to generate random ${difficulty} level open-ended question about ${topic}`),
+            //     {
+            //         question: 'question',
+            //         answer: 'answer with max length of 15 words.'
+            //     }
+            // )
         } else if (type === 'mcq') { // generating mcq questions
             questions = await generate(
                 `${amount}, ${difficulty} mcq questions on topic ${topic}`
