@@ -16,13 +16,13 @@ import SignOutDashboard from '../components/dashboardComponents/SignOutDashboard
 import { useRouter } from 'next/navigation';
 
 function Dashboard() {
-
-    const {data} = useSession()
-    const router = useRouter()
-    if(!data){
-        router.push('/login')
-    }
+    // const router = useRouter()
+    // const {data} = useSession()
     
+    // if(!data){
+    //     router.push('/login')
+    // }
+
     const [open, setOpen] = useState(true);
     const [selectedMenu, setSelectedMenu] = useState('Home');
 
@@ -48,18 +48,15 @@ function Dashboard() {
                 return <GenerateQuiz />;
             case 'History':
                 return <History />;
-            case 'Log Out':
-                signOut({ callbackUrl: '/', redirect: true })
             default:
                 return null;
         }
     };
 
     return (
-        <div className="flex h-screen">
+        <div className="flex h-full">
             <div
-                className={` ${open ? "w-72" : "w-20"
-                    } bg-gray-900 h-screen p-5  pt-5 relative duration-300`}
+                className={` ${open ? "w-72" : "w-20"} bg-gray-900 h-screen p-5  pt-5 relative duration-300`}
             >
                 <IoIosArrowBack
                     className={`absolute cursor-pointer bg-white -right-2 top-8 text-gray-900 w-5 h-5 border-gray-900 border-2 rounded-full ${!open && "rotate-180"}`}
@@ -90,7 +87,7 @@ function Dashboard() {
                     <li><SignOutDashboard myBool = {open}/></li>
                 </ul>
             </div>
-            <div className="h-screen flex-1 pt-20">
+            <div>
                 {renderContent()}
             </div>
         </div>
