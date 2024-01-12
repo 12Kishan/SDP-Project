@@ -1,15 +1,17 @@
-import { AuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connect } from "@/app/database/mongo.config";
+import GoogleProvider from "next-auth/providers/google";
+import { JWT } from "next-auth/jwt";
 import { User } from "@/app/model/user";
-import GoogleProvider from "next-auth/providers/google"
 
 connect()
 
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt"
     },
+    secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: '/login',
         // newUser: '/home'
@@ -32,7 +34,7 @@ export const authOptions: AuthOptions = {
                 return false
             }
         },
-        async jwt({ token }) {
+        async jwt({ token }: { token: JWT }) {
             return token
         },
         async session({ session, token, user }) {
