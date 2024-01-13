@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import type { DefaultSession, ISODateString, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connect } from "@/app/database/mongo.config";
 import GoogleProvider from "next-auth/providers/google";
@@ -6,7 +6,21 @@ import { JWT } from "next-auth/jwt";
 import { User } from "@/app/model/user";
 
 connect()
+declare module 'next-auth' {
+    interface Session extends DefaultSession {
+        user: {
+            isAdmin: boolean;
+        } & DefaultSession['user']
+    }
+}
+export type myUser = {
 
+    isAdmin: boolean;
+}
+export type mySession = {
+    user?: typeof User;
+    expires: ISODateString;
+}
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt"
@@ -17,6 +31,18 @@ export const authOptions: NextAuthOptions = {
         // newUser: '/home'
     },
     callbacks: {
+        async jwt({ token, user }) {
+            console.log(`user : ${user}`)
+            console.log(`token : ${token}`)
+            console.log({ ...token, ...user })
+            return { ...token, ...user };
+        },
+        async session({ session }) {
+            const user = await User.findOne({ email: session.user?.email })
+            session.user.isAdmin = user.isAdmin
+            console.log(session)
+            return session
+        },
         async signIn({ user, account, profile, email, credentials }) {
             try {
                 console.log(profile)
@@ -33,13 +59,6 @@ export const authOptions: NextAuthOptions = {
                 console.log("error in google signin : ", error)
                 return false
             }
-        },
-        async jwt({ token }: { token: JWT }) {
-            return token
-        },
-        async session({ session, token, user }) {
-            console.log(session)
-            return session
         },
     },
     providers: [

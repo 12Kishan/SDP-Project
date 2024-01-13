@@ -61,13 +61,13 @@ function Dashboard() {
                 <IoIosArrowBack
                     className={`absolute cursor-pointer bg-white -right-2 top-8 text-gray-900 w-5 h-5 border-gray-900 border-2 rounded-full ${!open && "rotate-180"}`}
                     onClick={() => setOpen(!open)} />
-                <Link className="flex gap-x-4 items-center" href={'/'}>
+                <Link className="flex gap-x-2 lg:gap-x-4 items-center" href={'/'}>
                     <img
                         src="/logo.png" height={50} width={50}
                         className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"
                             }`}
                     />
-                    <div className={`font-bold text-white mx-2 duration-200 ${!open && "scale-0"}`}>QuizBee</div>
+                    <div className={`font-bold text-white mx-0 md:mx-2 lg-mx-2 duration-200 text-base md:text-lg lg:text-xl ${!open && "scale-0"}`}>QuizBee</div>
                 </Link>
 
                 {/* Menu items */}

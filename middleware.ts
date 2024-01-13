@@ -7,9 +7,9 @@ export async function middleware(req: NextRequest) {
 
     const { pathname } = req.nextUrl
 
-    console.log('token outside : ', token)
-    if (!token && paths.includes(pathname)) {
-        console.log('token inside : ', token)
-        return NextResponse.redirect(new URL('/login', req.url))
-    }
+    // console.log('token outside : ', token)
+    // if (!token && paths.includes(pathname)) {
+    //     console.log('token inside : ', token)
+    //     return NextResponse.redirect(new URL('/login', req.url))
+    // }
 }

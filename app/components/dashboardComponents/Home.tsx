@@ -12,8 +12,7 @@ import {
   Text,
   Stack,
   Grid,
-  GridItem,
-  Box
+  GridItem
 } from '@chakra-ui/react'
 import { Image } from '@chakra-ui/react'
 
@@ -23,7 +22,7 @@ function Home() {
   const { data } = useSession()
 
   return (<>
-    <div className='pt-5 md:pt-20 lg:pt-30 h-screen overflow-scroll'>
+    <div className='pt-5 md:pt-20 lg:pt-30 h-screen overflow-y-scroll'>
       <Grid
         templateRows='repeat(2, 1fr)'
         templateColumns='repeat(1, 1fr)'
@@ -64,7 +63,7 @@ function Home() {
               </span>
               <Stack>
                 <CardBody>
-                  <Heading className='font-extrabold text-gray-900 text-l md:text-2xl lg:text-4xl'>But why i should generate quiz using AI?</Heading>
+                  <Heading className='text-start mb-8 text-md md:text-lg lg:text-2xl font-extrabold text-gray-900'>But why i should generate quiz using AI?</Heading>
 
                   <Text className='text-start text-sm md:text-base lg:text-l font-medium text-gray-900'>
                     - Diverse & Personalized quiz<br />

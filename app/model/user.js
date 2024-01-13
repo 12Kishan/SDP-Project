@@ -7,6 +7,7 @@ const userSchema = new Schema({
     password: String,
     emailVerified: Date,
     image: String,
+    isAdmin: Boolean,
     accounts: [{ type: Schema.Types.ObjectId, ref: 'Account' }],
     sessions: [{ type: Schema.Types.ObjectId, ref: 'Session' }],
 });
