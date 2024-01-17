@@ -1,0 +1,21 @@
+import { User } from "@/app/model/user";
+import { NextResponse } from "next/server";
+import { connect } from "@/app/database/mongo.config";
+
+connect();
+
+export async function GET(req:any){
+    let users = [];
+    try {
+        // users = await User.find().select("-password");
+        users = await User.find();
+        return NextResponse.json(users);
+    } catch (error) {
+        return NextResponse.json({
+            message : "error occured while fetching data" , 
+            status:false
+        });
+    }
+    
+}
+

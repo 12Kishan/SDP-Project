@@ -10,6 +10,7 @@ const userSchema = new Schema({
     accounts: [{ type: Schema.Types.ObjectId, ref: 'Account' }],
     sessions: [{ type: Schema.Types.ObjectId, ref: 'Session' }],
     password_reset: String,
+    isAdmin: { type: Boolean, default: false }
 });
 
 // const userSchema = new Schema({

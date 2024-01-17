@@ -1,8 +1,10 @@
-import { AuthOptions } from "next-auth";
+import { Account, AuthOptions, ISODateString, Profile } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connect } from "@/app/database/mongo.config";
 import { User } from "@/app/model/user";
 import GoogleProvider from "next-auth/providers/google"
+import { JWT } from "next-auth/jwt";
+import { AdapterUser } from "next-auth/adapters";
 
 connect()
 
@@ -21,7 +23,8 @@ export const authOptions: AuthOptions = {
                 }
                 await User.create({
                     name: user.name,
-                    email: user.email
+                    email: user.email,
+                    //isadmin: user.isadmin == null ? false : user.isadmin,
                 })
                 return true
             }catch(error){
@@ -29,8 +32,11 @@ export const authOptions: AuthOptions = {
                 return false
             }
         },
-        async session({ session, token, user }) {
-            console.log(session)
+        async session({ session }) {
+            const user = await User.findOne({email: session.user.email})
+
+            session.user.isAdmin = user.isAdmin;
+            console.log("session" , session)
             return session
         },
     },
