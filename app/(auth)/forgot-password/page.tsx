@@ -7,7 +7,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // Define the functional component 'page'
-export default function page() {
+export default function Page() {
 
     // State variables using the 'useState' hook
     const [email, setEmail] = useState("");
@@ -126,7 +126,7 @@ export default function page() {
                 </div>
             </div>
 
-            {/* Container for displaying toasts */}
+           
             <ToastContainer />
         </>
     );

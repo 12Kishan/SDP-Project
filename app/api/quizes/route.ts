@@ -1,4 +1,5 @@
-import { User } from "@/app/model/user";
+
+import { Quiz } from "@/app/model/quiz";
 import { NextResponse } from "next/server";
 import { connect } from "@/app/database/mongo.config";
 
@@ -7,7 +8,7 @@ connect();
 export async function GET(req:any){
     let users = [];
     try {
-        users = await User.find();
+        users = await Quiz.find();
         return NextResponse.json(users);
     } catch (error) {
         return NextResponse.json({
@@ -17,4 +18,3 @@ export async function GET(req:any){
     }
     
 }
-

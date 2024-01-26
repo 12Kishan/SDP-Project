@@ -40,3 +40,22 @@ export async function PUT(request:any, { params }:any) {
         }, { status: 400 })
     }
 }
+// { params:{userId:string}}
+
+export async function GET(req:any, { params }: { params: { userId: string } }){
+    try {   
+        console.log(params);
+        const {userId} = params;
+        const user = await User.findOne({_id:userId});
+        return NextResponse.json(user , {
+        status:200,
+        statusText:"user found successfully"
+    });
+    } catch (error) {
+        return NextResponse.json({
+            message:"user not found",
+            success:false
+        })
+    }
+    
+}

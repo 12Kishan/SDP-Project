@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/database/db.js"
-, "app/api/auth/register/route.js", "app/model/user.js", "app/api/auth/[...nextauth]/options.ts", "app/components/PasswordStrengthMeter.js", "app/api/auth/admin/signup/route.js", "app/api/users/[userId]/route.ts", "app/components/dashboardComponents/Analysis.jsx"  ],
+, "app/api/auth/register/route.js", "app/model/user.js", "app/api/auth/[...nextauth]/options.ts", "app/components/PasswordStrengthMeter.js", "app/api/auth/admin/signup/route.js", "app/api/users/[userId]/route.ts", "app/components/dashboardComponents/Analysis.jsx", "app/userDetails/userId.js"  ],
   "exclude": [
     "node_modules"
   ]

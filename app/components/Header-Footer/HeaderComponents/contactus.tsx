@@ -3,12 +3,6 @@ import {
     Menu,
     MenuButton,
     MenuList,
-    MenuItem,
-    MenuItemOption,
-    MenuGroup,
-    MenuOptionGroup,
-    MenuDivider,
-    Button,
     Card,
   } from '@chakra-ui/react'
 
@@ -29,10 +23,11 @@ import {
                
                 <p className='mt-1'>Have a question, suggestion, or just want to say hello? We&#39;d love to hear from you!</p>
                 <ul>
-                <li className='font-bold mt-2'>Kishan (Co-founder)</li>
-                <p className='mt-1'><a href="mailto:kishanzalavadia12@gmail.com">Email : kishanzalavadia12@gmail.com</a></p>
-                <li><h4 className='font-bold mt-2'>Neel (Co-founder)</h4></li>
+               
+                <li><h4 className='font-bold mt-2'>Neel</h4></li>
                 <p className='mt-1'>Email : <a href="mailto:neelvaghasiya0008@gmail.com">neelvaghasiya0008@gmail.com</a></p>
+                <li className='font-bold mt-2'>Kishan</li>
+                <p className='mt-1'>Email : <a href="mailto:kishanzalavadia12@gmail.com">kishanzalavadia12@gmail.com</a></p>
                 </ul>
                 
                 <p className='text-center mt-2'>For general inquiries or assistance, you can reach us at: <a href='mailto:quizbee812@gmail.com'>quizbee812@gmail.com</a></p>
