@@ -64,7 +64,7 @@ function User() {
   }, [fetchdata]);
 
   const items = usersData.map((item) => !item.isAdmin ? (
-    <Accordion defaultIndex={[1]} allowMultiple className='shadow-xl border-2 rounded-md my-2'>
+    <Accordion key={item._id} defaultIndex={[1]} allowMultiple className='shadow-xl border-2 rounded-md my-2'>
       <AccordionItem>
         <AccordionButton>
           <Box as="span" flex='1' textAlign='left' className='p-3'>

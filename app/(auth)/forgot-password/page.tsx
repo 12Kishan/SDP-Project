@@ -87,7 +87,7 @@ export default function page() {
                             </Link>
                         </div>
                         <h1 className="text-center text-2xl font-bold leading-tight text-white">Forgot Password</h1>
-                        <p className="mt-5 text-center text-gray-300">Enter your email and we'll send you a link to reset your password.</p>
+                        <p className="mt-5 text-center text-gray-300">Enter your email and we&#39;ll send you a link to reset your password.</p>
                         <form method="GET">
                             <div>
                                 {/* Input for entering email address */}

@@ -1,21 +1,70 @@
-import { Account, AuthOptions, ISODateString, Profile } from "next-auth";
+import type { DefaultSession, DefaultUser, ISODateString, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connect } from "@/app/database/mongo.config";
+import GoogleProvider from "next-auth/providers/google";
 import { User } from "@/app/model/user";
-import GoogleProvider from "next-auth/providers/google"
-import { JWT } from "next-auth/jwt";
-import { AdapterUser } from "next-auth/adapters";
 
 connect()
+declare module 'next-auth' {
+    interface Session extends DefaultSession {
+        user:{
+            id: string;
+            isAdmin: boolean;
+            date:Date;
+        } & DefaultSession['user']
+    }
+}
 
-export const authOptions: AuthOptions = {
+export type myUser = {
+    name?: string | null;
+    email?: string | null;
+    isAdmin?: boolean | null;
+    date?:Date;
+}
+
+export type mySession = {
+    user?: myUser;
+    expires: ISODateString;
+}
+
+export const authOptions: NextAuthOptions = {
+    session: {
+        strategy: "jwt"
+    },
+    secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: '/login',
         // newUser: '/home'
     },
-    callbacks:{
-        async signIn({user, account, profile, email, credentials}){
-            try{
+    callbacks: {
+        async jwt({ token }){
+            // console.log(user : ${user})
+            // const user = await User.findOne({ email: token.user?.email })
+            const tokenUser = await User.findOne({ email: token.email })
+            if (token.isAdmin === undefined) {
+                
+                if (tokenUser) {
+                    token.isAdmin = tokenUser.isAdmin
+                    console.log(tokenUser.date)
+                    token.date=tokenUser.date
+                }
+            }
+            
+            token.date=tokenUser.date
+            console.log(`token : `, token)
+            // console.log("both :", { ...token, ...user })
+            return token;
+        },
+        async session({ session }) {
+            const user = await User.findOne({ email: session.user?.email })
+            session.user.isAdmin = user.isAdmin
+            session.user.id = user._id
+            session.user.date=user.date
+            console.log(session)
+            return session
+        },
+        async signIn({ user, account, profile, email, credentials }) {
+            try {
                 console.log(profile)
                 const findUser = await User.findOne({ email: user.email })
                 if (findUser) {
@@ -23,21 +72,13 @@ export const authOptions: AuthOptions = {
                 }
                 await User.create({
                     name: user.name,
-                    email: user.email,
-                    //isadmin: user.isadmin == null ? false : user.isadmin,
+                    email: user.email
                 })
                 return true
-            }catch(error){
+            } catch (error) {
                 console.log("error in google signin : ", error)
                 return false
             }
-        },
-        async session({ session }) {
-            const user = await User.findOne({email: session.user.email})
-
-            session.user.isAdmin = user.isAdmin;
-            console.log("session" , session)
-            return session
         },
     },
     providers: [
@@ -68,6 +109,6 @@ export const authOptions: AuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!
-        })
-    ]
+        })
+    ]
 }
