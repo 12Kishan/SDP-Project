@@ -8,8 +8,9 @@ import {
 } from '@chakra-ui/react'
 import { BiSelectMultiple } from "react-icons/bi";
 import { AiOutlineEdit } from "react-icons/ai";
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import Loader from '../../Loader';
 
 // type Input = {
 //     topic: string
@@ -19,8 +20,10 @@ import { toast } from 'react-toastify';
 
 function QuizCreation() {
 
+    const router = useRouter()
     const [selectedType, setSelectedType] = useState<'mcq' | 'blanks'>('mcq');
     const [selectedDifficulty, setSelectedDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
+    const [isLoading, setLoading] = useState(false)
 
     const handleTypeSelect = (type: 'mcq' | 'blanks') => {
         setSelectedType(type);
@@ -38,35 +41,44 @@ function QuizCreation() {
     })
 
     const submit = async () => {
-        // alert(quizState.amount + ' ' + quizState.topic + ' ' + quizState.type + ' ' + quizState.difficulty)
-        await axios.post('/api/questions', quizState)
-            .then((res) => {
-                const response = res.data
-                if (response.status == 200) {
-                    toast.success('questions generated', {
-                        position: 'bottom-right'
-                    })
-                } else if(response.status == 400){
-                    toast.warning('Enter valid input', {
-                        position: 'bottom-right'
-                    })
-                } else if(response.status == 429){
-                    toast.error('Error in AI model', {
-                        position: 'bottom-right'
-                    })
-                }
-            })
-            .catch((err)=>{
-                toast.error('something went wrong', {
-                    position: 'bottom-right'
-                })
-            })
+        // alert(JSON.stringify(quizState))
+        try {
+            setLoading(true)
+            const response = await fetch('/api/quiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(quizState),
+            });
+            
+            const data = await response.json();
+            console.log(data)
+            const quizId = data.quizId
 
+            setLoading(false)
+
+            if (response.ok) {
+                if (quizState.type === 'mcq') {
+                    router.push(`/take-quiz/mcq/${quizId}`)
+                } else if(quizState.type === 'blanks'){
+                    router.push(`/take-quiz/blanks/${quizId}`)
+                }
+            } else {
+                console.log(data)
+            }
+            
+        } catch (err) {
+            toast.error('something went wrong', {
+                position: 'bottom-right'
+            });
+        }
     }
 
     return (
         <>
-            <div className="flex items-center justify-center px-4 sm:px-6 h-screen sm:py-16 lg:px-8 lg:py-24">
+            {isLoading && <Loader/>}
+            {!isLoading && (<div className="flex items-center justify-center px-4 sm:px-6 h-screen sm:py-16 lg:px-8 lg:py-24">
                 <Card className='bg-gray-900 rounded-3xl px-7 py-7'>
                     <CardHeader>
                         <h2 className="text-center text-3xl font-bold leading-tight text-white">
@@ -91,7 +103,8 @@ function QuizCreation() {
                                             onChange={(e) => {
                                                 setQuizState({ ...quizState, topic: e.target.value })
                                             }}
-                                        ></input>
+                                            required
+                                        />
                                     </div>
                                 </div>
                                 <div>
@@ -106,7 +119,8 @@ function QuizCreation() {
                                             onChange={(e) => {
                                                 setQuizState({ ...quizState, amount: parseInt(e.target.value, 10) || 0 })
                                             }}
-                                        ></input>
+                                            required
+                                        />
                                     </div>
                                 </div>
                                 <div className="flex justify-center space-x-2">
@@ -172,17 +186,44 @@ function QuizCreation() {
                                         type="button"
                                         className={`inline-flex w-full items-center justify-center text-white border-solid border-2 hover:bg-white hover:text-gray-900 rounded-full bg-transparent px-3.5 py-2.5 font-semibold leading-7`}
                                         onClick={submit}
+                                        disabled={isLoading}
                                     >
-                                        Generate Quiz
+                                        {isLoading ? "Please wait" :"Generate Quiz"}
                                     </button>
                                 </div>
                             </div>
                         </form>
                     </CardBody>
                 </Card>
-            </div>
+            </div>)}
+            <ToastContainer/>
         </>
     )
 }
 
 export default QuizCreation
+
+/*
+await axios.post('/api/questions', quizState)
+            .then((res) => {
+                const response = res.data
+                if (response.status == 200) {
+                    toast.success('questions generated', {
+                        position: 'bottom-right'
+                    })
+                } else if(response.status == 400){
+                    toast.warning('Enter valid input', {
+                        position: 'bottom-right'
+                    })
+                } else if(response.status == 429){
+                    toast.error('Error in AI model', {
+                        position: 'bottom-right'
+                    })
+                }
+            })
+            .catch((err)=>{
+                toast.error('something went wrong', {
+                    position: 'bottom-right'
+                })
+            })
+*/

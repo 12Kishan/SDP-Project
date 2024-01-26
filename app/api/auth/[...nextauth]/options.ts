@@ -1,26 +1,30 @@
-import type { DefaultSession, ISODateString, NextAuthOptions } from "next-auth";
+import type { DefaultSession, DefaultUser, ISODateString, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connect } from "@/app/database/mongo.config";
 import GoogleProvider from "next-auth/providers/google";
-import { JWT } from "next-auth/jwt";
 import { User } from "@/app/model/user";
 
 connect()
 declare module 'next-auth' {
     interface Session extends DefaultSession {
         user: {
+            id: string;
             isAdmin: boolean;
         } & DefaultSession['user']
     }
 }
-export type myUser = {
 
-    isAdmin: boolean;
+export type myUser = {
+    name?: string | null;
+    email?: string | null;
+    isAdmin?: boolean | null;
 }
+
 export type mySession = {
-    user?: typeof User;
+    user?: myUser;
     expires: ISODateString;
 }
+
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt"
@@ -31,16 +35,24 @@ export const authOptions: NextAuthOptions = {
         // newUser: '/home'
     },
     callbacks: {
-        async jwt({ token, user }) {
-            console.log(`user : ${user}`)
-            console.log(`token : ${token}`)
-            console.log("both :", { ...token, ...user })
-            return { ...token, ...user };
+        async jwt({ token }){
+            // console.log(`user : ${user}`)
+            // const user = await User.findOne({ email: token.user?.email })
+            if (token.isAdmin === undefined) {
+                const tokenUser = await User.findOne({ email: token.email })
+                if (tokenUser) {
+                    token.isAdmin = tokenUser.isAdmin
+                }
+            }
+            console.log(`token : `, token)
+            // console.log("both :", { ...token, ...user })
+            return token;
         },
         async session({ session }) {
             const user = await User.findOne({ email: session.user?.email })
             session.user.isAdmin = user.isAdmin
-            console.log(session)
+            session.user.id = user._id
+            console.log('session : ', session)
             return session
         },
         async signIn({ user, account, profile, email, credentials }) {

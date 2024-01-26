@@ -5,6 +5,7 @@ import Image from 'next/image';
 import SignInBtn from '../Buttons/signInBtn';
 import SignOutBtn from '../Buttons/signOutBtn';
 import { useSession } from 'next-auth/react';
+import ReactLoading from 'react-loading';
 
 function Header() {
   const { data } = useSession()

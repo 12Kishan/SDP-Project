@@ -6,3 +6,8 @@ export const quizSchema = z.object({
     difficulty: z.enum(['easy', 'medium', 'hard']),
     amount: z.number().min(1).max(10)
 })
+
+export const answerSchema = z.object({
+    questionId: z.string(),
+    userAnswer: z.string()
+})

@@ -3,12 +3,11 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { passwordStrength } from 'check-password-strength'
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { toast, Toaster } from 'react-hot-toast';
 
 export default function Register() {
 
@@ -48,49 +47,84 @@ export default function Register() {
     const submit = async () => {
         setLoading(true)
         if (message === 'Strong') {
-            await axios.post('/api/auth/register', authState)
-                .then((res) => {
-                    setLoading(false)
-                    const response = res.data
-                    if (response.status == 200) {
-                        displaySuccessToast(response.message?.toLowerCase())
-                        setTimeout(() => {
-                            router.push(`/login`)
-                        }, 1000);
-                    } else if (response?.status == 400) {
-                        for (const key in response.errors) {
-                            if (response.errors.hasOwnProperty(key)) {
-                                const errorMessage = response.errors[key].toLowerCase();
-                                displayWarningToast(`${errorMessage}`);
-                            }
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(authState),
+                });
+
+                const responseData = await response.json();
+                setLoading(false);
+
+                if (response.ok) {
+                    displaySuccessToast(responseData.message?.toLowerCase());
+                    setTimeout(() => {
+                        router.push(`/login`);
+                    }, 1000);
+                } else if (response.status === 400) {
+                    for (const key in responseData.errors) {
+                        if (responseData.errors.hasOwnProperty(key)) {
+                            const errorMessage = responseData.errors[key].toLowerCase();
+                            displayWarningToast(`${errorMessage}`);
                         }
                     }
-                })
-                .catch((err) => {
-                    setLoading(false)
-                    displayErrorToast("Something went wrong")
-                })
+                }
+            } catch (err) {
+                setLoading(false);
+                displayErrorToast("Something went wrong");
+            }
+
         } else {
             setLoading(false)
             displayWarningToast('Use strong password')
         }
     }
 
-    const displayErrorToast = (str: String) => {
+    const displayErrorToast = (str: string) => {
         toast.error(str, {
-            position: toast.POSITION.BOTTOM_RIGHT,
+            style: {
+                border: '2px solid #111827',
+                padding: '16px',
+                color: '#fff',
+                background: 'red'
+            },
+            iconTheme: {
+                primary: 'white',
+                secondary: 'red',
+            },
         })
     }
 
-    const displayWarningToast = (str: String) => {
-        toast.warning(str, {
-            position: toast.POSITION.BOTTOM_RIGHT,
+    const displayWarningToast = (str: string) => {
+        toast.error(str, {
+            style: {
+                border: '2px solid #111827',
+                padding: '16px',
+                color: '#fff',
+                background: 'red'
+            },
+            iconTheme: {
+                primary: 'white',
+                secondary: 'red',
+            },
         })
     }
 
-    const displaySuccessToast = (str: String) => {
+    const displaySuccessToast = (str: string) => {
         toast.success(str, {
-            position: toast.POSITION.BOTTOM_RIGHT,
+            style: {
+                border: '2px solid #111827',
+                padding: '16px',
+                color: '#fff',
+                background: 'green'
+            },
+            iconTheme: {
+                primary: 'white',
+                secondary: 'green',
+            },
         })
     }
 
@@ -214,7 +248,37 @@ export default function Register() {
                     </div>
                 </div>
             </div>
-            <ToastContainer />
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
         </section>
     )
 }
+/*
+
+await axios.post('/api/auth/register', authState)
+                .then((res) => {
+                    setLoading(false)
+                    const response = res.data
+                    if (response.status == 200) {
+                        displaySuccessToast(response.message?.toLowerCase())
+                        setTimeout(() => {
+                            router.push(`/login`)
+                        }, 1000);
+                    } else if (response?.status == 400) {
+                        for (const key in response.errors) {
+                            if (response.errors.hasOwnProperty(key)) {
+                                const errorMessage = response.errors[key].toLowerCase();
+                                displayWarningToast(`${errorMessage}`);
+                            }
+                        }
+                    }
+                })
+                .catch((err) => {
+                    setLoading(false)
+                    displayErrorToast("Something went wrong")
+                })
+
+
+*/

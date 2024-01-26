@@ -1,18 +1,13 @@
 import { NextResponse } from "next/server"
 import { quizSchema } from "@/validator/quizSchema"
 import { ZodError } from "zod"
-import generate from "@/app/lib/myGpt"
+import { generate_mcq, generate_blanks } from "@/app/lib/myGpt"
 
+
+// /api/question
 export async function POST(req: Request, res: Response) {
     try {
-        // checking session on server side, to ensure no one is spamming
-        // const session = await getServerSession(authOptions)
-        // if (!session?.user) {
-        //     return NextResponse.json({
-        //         error: 'You uave to log in for creating quiz.'
-        //     }, { status: 400 })
-        // }
-        // getting req body
+
         const body = await req.json()
 
         // destructure and validate request body
@@ -23,26 +18,29 @@ export async function POST(req: Request, res: Response) {
 
         // generating blank questions.
         if (type === "blanks") {
-            // questions = await strict_output(
-            //     'You are a helpful AI that is able to generate a pair of questions and answers, the length of answer should not exceed 15 words, Store all the pairs of quations and answers in JSON array.',
-            //     new Array(amount).fill(`You have to generate random ${difficulty} level open-ended question about ${topic}`),
-            //     {
-            //         question: 'question',
-            //         answer: 'answer with max length of 15 words.'
-            //     }
-            // )
+            questions = await generate_blanks(
+                `provide random open-ended questions on topic:${topic}, no. of questions: ${amount}, difficulty: ${difficulty}`
+            )
         } else if (type === 'mcq') { // generating mcq questions
-            questions = await generate(
-                `${amount}, ${difficulty} mcq questions on topic ${topic}`
+            questions = await generate_mcq(
+                `provide random mcq on topic:${topic}, no. of mcq: ${amount}, difficulty: ${difficulty}`
             )
         }
-        console.log(questions)
+        try {
+            questions = JSON.parse(questions)
+        } catch (err) {
+            console.log('parse error')
+            return NextResponse.json({
+                message: 'server error'
+            }, { status: 500 })
+        }
+        // console.log(questions)
         return NextResponse.json({
             questions
         }, { status: 200 })
     } catch (err) {
-        console.log(err)
         if (err instanceof ZodError) {
+            console.log(err.issues)
             return NextResponse.json(
                 { error: err.issues, },
                 { status: 400 }
