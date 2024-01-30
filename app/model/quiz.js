@@ -15,6 +15,7 @@ const quizSchema = new Schema({
   userId: { type: mongoose.ObjectId },
   timeStarted: { type: Date, required: true },
   timeEnded: { type: Date },
+  timeTaken: {type: String},
   topic: { type: String, required: true },
   type: { type: String, enum: Object.values(QuizType), default: QuizType.MCQ },
   difficulty: {

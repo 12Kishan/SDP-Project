@@ -11,7 +11,7 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 //   }
 // }
 
-export async function GET(req, {params}) {
+export async function GET(req, { params }) {
   try {
     // const session = await getServerSession(authOptions)
     // if (!session?.user) {
@@ -19,29 +19,29 @@ export async function GET(req, {params}) {
     //     error: 'You must be logged in.'
     //   }, { status: 401 })
     // }
-    console.log('session checked')
+    console.log("session checked");
 
-    console.log(params)
+    console.log(params);
     const { quizId } = params;
-    console.log(quizId)
-
-
+    console.log(quizId);
 
     if (!mongoose.Types.ObjectId.isValid(quizId)) {
       return NextResponse.json({}, { status: 400 });
     }
 
-    const quiz = await Quiz.findOne({ _id: quizId });
+    const quiz = await Quiz.findOne(
+      { _id: quizId },
+      { userId: 1, topic: 1, questions: 1 }
+    );
 
     if (!quiz) {
       return NextResponse.json({}, { status: 400 });
     }
-
+    console.log(quiz)
     const questions = await Question.find({ quizId: quizId });
     return NextResponse.json({ quiz, questions });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Internal Server Error" });
   }
-
 }

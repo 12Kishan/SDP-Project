@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import MCQ from '@/app/components/quizComponent/MCQ'
 import Loader from '@/app/components/Loader';
+import { useRouter } from 'next/navigation';
+import mongoose from 'mongoose';
 
 
 type Props = {
@@ -13,9 +15,12 @@ type Props = {
 function MCQQuestionPage({ params: { quizId } }: Props) {
     const [quiz, setQuiz] = useState({})
     const [questions, setQuestions] = useState([])
-
     const [loading, setLoading] = useState(true)
-
+    // const router = useRouter()
+    
+    // if (!mongoose.Types.ObjectId.isValid(quizId)) {
+    //     return router.push('/dashboard/quiz')
+    // }
     useEffect(() => {
         fetch(`/api/getQuestions/${quizId}`)
             .then((res) => res.json())
@@ -55,3 +60,5 @@ export default MCQQuestionPage
 //     return redirect('/dashboard/quiz')
 // }
 // const questions = await Question.find({ quizId: quizId })
+
+// take-quiz/mcq/65a50cccb026fa73017120e9

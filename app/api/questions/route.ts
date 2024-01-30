@@ -19,11 +19,11 @@ export async function POST(req: Request, res: Response) {
         // generating blank questions.
         if (type === "blanks") {
             questions = await generate_blanks(
-                `provide random open-ended questions on topic:${topic}, no. of questions: ${amount}, difficulty: ${difficulty}`
+                `strictly provide random fill the blanks questions on topic:${topic}, no. of questions: ${amount}, difficulty: ${difficulty}`
             )
         } else if (type === 'mcq') { // generating mcq questions
             questions = await generate_mcq(
-                `provide random mcq on topic:${topic}, no. of mcq: ${amount}, difficulty: ${difficulty}`
+                `Strictly adhere to the specified difficulty level when generating questions. Provide random MCQs on topic: ${topic}, number of MCQs: ${amount}, difficulty: ${difficulty}.  Ensure unique options and that the correct answer is not repeated among the options`
             )
         }
         try {

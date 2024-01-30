@@ -10,7 +10,6 @@ export function formatTime(seconds: number) {
         time += `${padZero(minutes)}m `
     }
     time += `${padZero(remainingSeconds)}s`
-    // const time = `${padZero(hours)}hr:${padZero(minutes)}min:${padZero(remainingSeconds)}sec`;
     return time;
 }
 

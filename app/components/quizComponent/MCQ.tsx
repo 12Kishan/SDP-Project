@@ -30,13 +30,10 @@ function MCQ({ quiz, questions }: Props) {
   const [hasEnded, setHasEnded] = useState(false)
   let [correct, setCorrect] = useState(0)
   let [wrong, setWrong] = useState(0)
-  const [hasMounted, setHasMounted] = useState(false);
-  const [currTime, setCurrTime] = useState<Date>(new Date())
+  const [startTime, setStartTime] = useState<Date | null>(null)
   const optionArr = ['A', 'B', 'C', 'D']
 
   const currQuestion = React.useMemo(() => {
-    console.log('que: ', questions)
-    console.log('quiz: ', quiz)
     return questions[index]
   }, [index])
 
@@ -56,6 +53,9 @@ function MCQ({ quiz, questions }: Props) {
       try {
         const obj = {
           questionId: currQuestion._id,
+          index: index,
+          timeTaken: startTime ? formatTime(Math.floor(((expiryTimestamp.getTime() - startTime?.getTime()) / 1000))) : '',
+          len: questions.length,
           userAnswer: options[choice]
         }
         setLoading(true)
@@ -72,9 +72,6 @@ function MCQ({ quiz, questions }: Props) {
 
         if (response.ok) {
           if (data.isCorrect) {
-            // toast.success('correct answer..!', {
-            //   position:'bottom-right'
-            // })
             setCorrect((prev) => prev + 1)
             toast.success('correct answer', {
               style: {
@@ -89,9 +86,6 @@ function MCQ({ quiz, questions }: Props) {
               },
             })
           } else {
-            // toast.error('wrong answer..!', {
-            //   position:'bottom-right'
-            // })
             setWrong((prev) => prev + 1)
             toast.error("Wrong answer", {
               style: {
@@ -107,8 +101,12 @@ function MCQ({ quiz, questions }: Props) {
             })
           }
           if (index === quiz.questions.length - 1) {
+            pause()
+            expiryTimestamp = new Date()
             setTimeout(() => {
               setHasEnded(true)
+              console.log('start : ', startTime)
+              console.log('end: ', expiryTimestamp)
             }, 1000)
             return
           }
@@ -133,18 +131,20 @@ function MCQ({ quiz, questions }: Props) {
             secondary: 'red',
           },
         })
-        // toast.error('something went wrong', {
-        //   position: 'bottom-right'
-        // });
       }
     }
   }
-  const expiryTimestamp = (new Date());
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 10)
-  
+  let expiryTimestamp = (new Date());
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 600)
+
   useEffect(() => {
-    console.log(expiryTimestamp)
-  },[expiryTimestamp])
+    if (startTime === null) {
+      setStartTime(expiryTimestamp)
+      console.log('start time set: ', startTime)
+    }
+    console.log('exp time: ', expiryTimestamp)
+  }, [expiryTimestamp])
+
   const {
     seconds,
     hours,
@@ -155,19 +155,20 @@ function MCQ({ quiz, questions }: Props) {
       setHasEnded((prev) => !prev)
       pause()
       console.log('second: ', seconds)
+      console.log('start : ', startTime)
     }
   });
- 
+
   return (
     <>
       <section>
         {hasEnded && (
           <div className="flex items-center text-center justify-center text-white pt-5" >
             <div className=" bg-gray-900 p-5 rounded-2xl shadow-2xl">
-              <div className="">You completed in {}</div>
+              <div className="">You completed in {!startTime ? "" : formatTime(Math.floor(((expiryTimestamp.getTime() - startTime?.getTime()) / 1000)))}</div>
               <div className="mt-4 flex gap-x-3 justify-center items-center">
                 <Link href={'/dashboard'} className="bg-red-700 p-2 rounded-xl"><FaHome className='h-6 w-6' /></Link>
-                <Link href={`/statistics/${quiz._id}`} className='flex flex-row gap-x-3 p-2 justify-center items-center bg-green-700 rounded-xl'>
+                <Link href='/statistics/[userId]/[quizId]' as={`/statistics/${quiz.userId}/${quiz._id}`} className='flex flex-row gap-x-3 p-2 justify-center items-center bg-green-700 rounded-xl'>
                   <RiLineChartFill />
                   <div>View statistics</div>
                 </Link>
@@ -183,7 +184,6 @@ function MCQ({ quiz, questions }: Props) {
                 <div className='flex gap-x-2 items-center'><p className='text-gray-500'>Topic</p><span className='bg-gray-700 text-white text-center rounded-lg py-0.5 px-1'>{quiz.topic}</span></div>
                 <div className='gap-x-1 flex items-center text-white'><PiClockClockwise className='w-5 h-5' /><span>{`${hours}h ${minutes}m ${seconds}s`}</span></div>
                 <Counter correct={correct} wrong={wrong} />
-                {/* <p className='hidden md:text-white lg:text-white py-0.5  font-extrabold'>QuizBee</p> */}
               </div>
               {/* Question here */}
               <CardHeader>
@@ -237,7 +237,7 @@ export default MCQ
 //       </Link>
 //     </div>
 //   </div>
-//     </div>  forward:  formatTime(Math.floor(((currTime.getTime() - new Date(quiz.timeStarted).getTime()) / 1000)))
+//     </div>  forward:  formatTime(Math.floor(((startTime.getTime() - new Date(quiz.timeStarted).getTime()) / 1000)))
 
 
 // const [quizStartTime, setQuizStartTime] = useState(new Date());
@@ -249,7 +249,7 @@ export default MCQ
 //   if (hasMounted) {
 //     const interval = setInterval(() => {
 //       if (!hasEnded) {
-//         setCurrTime(new Date());
+//         setstartTime(new Date());
 //       }
 //     }, 1000)
 //     return () => clearInterval(interval);

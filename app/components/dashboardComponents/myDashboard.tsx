@@ -48,7 +48,7 @@ function MyDashboard() {
 
     return (<>
         {!data && <Loader/>}
-        {data && <div className="flex h-full">
+        {data && <div className="flex h-screen">
             <div
                 className={` ${open ? "w-72" : "w-20"} bg-gray-900 h-screen p-5  pt-5 relative duration-300`}
             >

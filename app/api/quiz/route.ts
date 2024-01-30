@@ -92,8 +92,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
             console.log('blank array: ', blankArray)
             // storing blanks
             for (let blank of blankArray) {
-                let createdMCQ = await Question.create(blank)
-                blankIdArr.push(createdMCQ._id)
+                let createdBlank = await Question.create(blank)
+                blankIdArr.push(createdBlank._id)
             }
             await Quiz.findByIdAndUpdate(quiz._id, { $push: { questions: { $each: blankIdArr } } }, { new: true })
             console.log('blanks created')
