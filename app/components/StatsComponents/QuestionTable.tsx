@@ -19,7 +19,7 @@ function QuestionTable({ questions }: Props) {
                 </CTableHead>
                 <CTableBody>
                     {questions.map((question: any, index: number) => (
-                        <CTableRow key={index} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
+                        <CTableRow key={index} className={`text-gray-900 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'}`}>
                             <CTableHeaderCell scope="row" className="pr-4">{index + 1}</CTableHeaderCell>
                             <CTableDataCell>
                                 {question.question}

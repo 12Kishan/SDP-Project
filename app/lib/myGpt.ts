@@ -1,5 +1,4 @@
 import { OpenAI } from 'openai';
-import { resolve } from 'path';
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,

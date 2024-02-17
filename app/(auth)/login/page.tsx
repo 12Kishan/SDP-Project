@@ -23,7 +23,6 @@ export default function Login() {
             callbackUrl: "/dashboard",
             redirect: true
         })
-        // localStorage.setItem('email', authState?.email)
     }
 
     const submit = () => {
@@ -88,7 +87,7 @@ export default function Login() {
 
     return (
     <>
-        {!loading && <section>
+        {!loading && <section className='bg-gray-700'>
                 <div className="flex items-center justify-center px-4 sm:px-6 h-screen sm:py-16 lg:px-8 lg:py-24">
                     <div className="bg-gray-900 rounded-3xl px-7 py-7 text-white" >
                         <div className="xl:mx-auto items-center xl:w-full xl:max-w-sm 2xl:max-w-md">

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import Loader from '@/app/components/Loader';
 import { useRouter } from 'next/navigation';
-import mongoose from 'mongoose';
 import Blank from '@/app/components/quizComponent/Blank';
 
 
@@ -22,7 +21,7 @@ function BlankQuestionPage({ params: { quizId } }: Props) {
   //   return router.push('/dashboard/quiz')
   // }
   useEffect(() => {
-    fetch(`/api/getQuestions/${quizId}`)
+    fetch(`/api/question/${quizId}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("data ", data)

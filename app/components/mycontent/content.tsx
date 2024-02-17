@@ -4,7 +4,7 @@ import React from 'react'
 function Content() {
   return (
         <>
-      <section className="bg-white dark:bg-gray-900">
+      <section className="bg-gray-900">
         <div className="grid py-8 px-4 mx-auto max-w-screen-xl lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
           <div className="place-self-center space-y-3 mr-auto lg:col-span-7">
             <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none md:text-5xl xl:text-6xl dark:text-white">AI-powered question generator</h1>
@@ -23,13 +23,13 @@ function Content() {
         </div>
       </section>
 
-      <section className="bg-white dark:bg-gray-900">
+      <section className="bg-gray-900">
         <div className="py-8 px-4 mx-auto max-w-screen-xl">
           <h2 className="text-3xl font-extrabold tracking-tight leading-tight text-center text-gray-900 dark:text-white md:text-4xl">Generate questions from text</h2>
         </div>
       </section>
 
-      <section className="bg-gray-50 dark:bg-gray-800">
+      <section className="bg-gray-800">
         <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
           <div className="mb-8 max-w-screen-md lg:mb-16">
             <h2 className="mb-4 text-4xl font-extrabold text-gray-900 dark:text-white">Why generate questions with AI?</h2>
@@ -61,7 +61,7 @@ function Content() {
         </div>
       </section>
 
-      <section className="bg-white dark:bg-gray-900">
+      <section className="bg-gray-900">
         <div className="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
           <div className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
             <h2 className="mb-4 text-4xl font-extrabold text-gray-900 dark:text-white">Question generator on selected topics</h2>

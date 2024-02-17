@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import MCQ from '@/app/components/quizComponent/MCQ'
 import Loader from '@/app/components/Loader';
-import { useRouter } from 'next/navigation';
-import mongoose from 'mongoose';
 
 
 type Props = {
@@ -22,7 +20,7 @@ function MCQQuestionPage({ params: { quizId } }: Props) {
     //     return router.push('/dashboard/quiz')
     // }
     useEffect(() => {
-        fetch(`/api/getQuestions/${quizId}`)
+        fetch(`/api/question/${quizId}`)
             .then((res) => res.json())
             .then((data) => {
                 console.log("data ", data)

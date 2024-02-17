@@ -1,15 +1,10 @@
-import MyDashboard from "../components/dashboardComponents/myDashboard"
+import Content from "@/app/components/dbComponents/Content"
+import { DashboardLayout } from './Layout'
 
-
-export const metadata = {
-    title: "Dashboard | QuizBee"
-}
-
-async function Dashboard() {
-    return (<>
-        <MyDashboard />
-    </>
+export default function HomePage() {
+    return (
+        <DashboardLayout title='Home'>
+            <Content title="Home" />
+        </DashboardLayout>
     )
 }
-
-export default Dashboard
