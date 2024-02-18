@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import MCQ from '@/app/components/quizComponent/MCQ'
 import Loader from '@/app/components/Loader';
+import { useSession } from 'next-auth/react';
 
 
 type Props = {
@@ -11,16 +12,17 @@ type Props = {
 }
 
 function MCQQuestionPage({ params: { quizId } }: Props) {
+    const { data } = useSession()
     const [quiz, setQuiz] = useState({})
     const [questions, setQuestions] = useState([])
     const [loading, setLoading] = useState(true)
     // const router = useRouter()
-    
+
     // if (!mongoose.Types.ObjectId.isValid(quizId)) {
     //     return router.push('/dashboard/quiz')
     // }
     useEffect(() => {
-        fetch(`/api/question/${quizId}`)
+        fetch(`/api/questions/${quizId}`)
             .then((res) => res.json())
             .then((data) => {
                 console.log("data ", data)
@@ -33,8 +35,8 @@ function MCQQuestionPage({ params: { quizId } }: Props) {
     }, [])
 
     return <>
-        {loading && <Loader/>}
-        {!loading && <><MCQ quiz={quiz} questions={questions} /></>}
+        {loading && <Loader />}
+        {!loading && <><MCQ quiz={quiz} questions={questions} userId={data?.user.id}/></>}
     </>
 }
 

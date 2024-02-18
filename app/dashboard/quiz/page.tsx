@@ -8,7 +8,7 @@ export const metadata = {
 function QuizPage() {
   return (
     <div>
-        <QuizCreation shared={true}/>
+        <QuizCreation shared={false}/>
     </div>
   )
 }

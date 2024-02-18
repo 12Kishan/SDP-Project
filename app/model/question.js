@@ -8,12 +8,12 @@ const QuizType = {
 const questionSchema = new Schema({
   question: { type: String, required: true },
   answer: { type: String, required: true },
-quizId: { type: mongoose.Types.ObjectId/*, required: true*/ },
-  options: { type: String , default: undefined }, // For MCQ
-  percentageCorrect: { type: Number }, // For blanks
+  quizId: { type: mongoose.Types.ObjectId/*, required: true*/ },
   questionType: { type: String, enum: Object.values(QuizType) },
-  userAnswer: { type: String },
-  isCorrect: { type: Boolean },
+  options: { type: String , default: undefined }, // For MCQ
+  // percentageCorrect: { type: Number }, // For blanks
+  // userAnswer: { type: String },
+  // isCorrect: { type: Boolean },
 });
 
 const Question = mongoose.models.Questions || mongoose.model("Questions", questionSchema);

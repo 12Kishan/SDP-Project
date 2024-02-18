@@ -33,10 +33,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
         console.log('before quiz')
         const quiz = await Quiz.create({
             type: type || QuizType.MCQ,
-            timeStarted: new Date(),
             userId: new mongoose.Types.ObjectId(session.user.id),
             topic: topic,
-            difficulty: difficulty || QuizDifficulty.Easy
+            difficulty: difficulty || QuizDifficulty.Easy,
+            shared:true
         })
         console.log('quiz created')
 

@@ -20,7 +20,7 @@ import Loader from '../../Loader';
 type Props = {
     shared: boolean
 }
-function QuizCreation({ shared = true }: Props) {
+function QuizCreation({ shared = false }: Props) {
 
     const router = useRouter()
     const [selectedType, setSelectedType] = useState<'mcq' | 'blanks'>('mcq');
@@ -218,6 +218,7 @@ function QuizCreation({ shared = true }: Props) {
 
 export default QuizCreation
 
+//take-quiz/mcq/65d23bc22eb0be0bf40d332e
 /*
 await axios.post('/api/questions', quizState)
             .then((res) => {

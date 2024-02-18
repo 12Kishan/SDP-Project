@@ -3,7 +3,9 @@ import QuestionTable from '@/app/components/StatsComponents/QuestionTable'
 import TimeTaken from '@/app/components/StatsComponents/TimeTaken'
 import UserChart from '@/app/components/StatsComponents/UserChart'
 import { Question } from '@/app/model/question'
+import { QuestionUser } from '@/app/model/question_user'
 import { Quiz } from '@/app/model/quiz'
+import { QuizUsers } from '@/app/model/quiz_user'
 import { User } from '@/app/model/user'
 import Link from 'next/link'
 import React from 'react'
@@ -16,13 +18,20 @@ type Props = {
     searchParams: any
 }
 const StatisticPage = async ({ params }: Props) => {
-
+    const questionUser = await QuestionUser.find({ quizId: params.quizId, userId: params.userId }, { isCorrect: 1, userAnswer: 1 })
+    const quizUser = await QuizUsers.findOne({ quizId: params.quizId, userId: params.userId }, { timeTaken: 1 })
     const user = await User.findOne({ _id: params.userId }, { name: 1, _id: 0 })
-    const questions = await Question.find({ quizId: params.quizId })
-    const quiz = await Quiz.findOne({ _id: params.quizId }, { topic: 1, timeTaken: 1, _id: 0, difficulty: 1 })
+    const quiz = await Quiz.findOne({ _id: params.quizId }, { topic: 1, _id: 0, difficulty: 1 })
+    const questions = await Question.find({ quizId: params.quizId }, { question: 1, answer: 1, questionType: 1 })
+
+    // const questionUser = await QuestionUser.find({ userId: params.userId })
+
+    // const user = await User.findOne({ _id: params.userId }, { name: 1, _id: 0 })
+    // const questions = await Question.find({ quizId: params.quizId })
+    // const quiz = await Quiz.findOne({ _id: params.quizId }, { topic: 1, timeTaken: 1, _id: 0, difficulty: 1 })
 
     let correct: number = 0
-    for (let obj of questions) {
+    for (let obj of questionUser) {
         if (obj?.isCorrect) {
             correct++
         }
@@ -66,14 +75,14 @@ const StatisticPage = async ({ params }: Props) => {
                                 <Accuracy correct={correct} incorrect={questions.length - correct} />
                             </div>
                             <div className="lg:col-span-2 bg-gray-700 py-2 px-5 text-white rounded-md mt-5 items-center text-center text-xs md:text-sm lg:text-base lg:flex lg:justify-between lg:items-center md:flex md:justify-between font-semibold md:items-center">
-                                <TimeTaken timeTaken={quiz.timeTaken} />
+                                <TimeTaken timeTaken={quizUser.timeTaken} />
                             </div>
                             <div className="lg:row-span-2 flex h-56 justify-center mt-5 rounded-md bg-gray-700 lg:ml-4">
                                 <UserChart correct={correct} incorrect={questions.length - correct} />
                             </div>
                         </div>
                         <div className="bg-gray-700 flex items-center justify-center text-white py-2 px-5 rounded-md mt-5">
-                            <QuestionTable questions={questions}/>
+                            <QuestionTable questions={questions} questionUser={questionUser}/>
                             {/* {JSON.stringify(questions)} */}
                         </div>
                     </div>

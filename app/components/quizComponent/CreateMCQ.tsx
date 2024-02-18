@@ -3,8 +3,13 @@ import React from 'react';
 import Link from "next/link";
 import Loader from "@/app/components/Loader";
 import { Card } from "@chakra-ui/react";
-import { Quiz } from "@/app/model/quiz";
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react';
+
+
+
 
 type Props = {
     quizObj: any
@@ -13,8 +18,11 @@ type Props = {
 
 function CreateMCQ({ quizObj, questionArr }: Props) {
 
+    const router = useRouter();
+    const { data } = useSession()
     const [loading, setLoading] = useState(true);
     const [quiz, setQuiz] = useState({
+        userId: '',
         type: "",
         topic: "",
         difficulty: "",
@@ -29,14 +37,11 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
         }
     ]);
 
-    console.log('quiz ', quiz);
-    console.log('que ', questions);
+
     useEffect(() => {
-        console.log('quiz useeff', quiz);
-        console.log('que useeff', questions);
-        
+
         setQuestions(questionArr);
-        setQuiz(quizObj);
+        setQuiz({ ...quizObj, shared: true, userId:data?.user.id});
         console.log("useEffect called in crete mcq");
         setLoading(false);
     }, []);
@@ -55,12 +60,17 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
     ) => {
         const newQuestions = questions.map((item, inIndex) => {
             if (inIndex == indexOfQuestion) {
+
+                let updatedans;
+                indexOfOption == 0 ? (updatedans = newOption) : (updatedans = item.answer);
+
+
                 const updatedOptions = JSON.parse(item.options).map((option: string, inOptionIndex: number) => {
-                    //answer change
-                        return inOptionIndex == indexOfOption ? newOption : option;
-                    }
+
+                    return inOptionIndex == indexOfOption ? newOption : option;
+                }
                 );
-                return { ...item, options: JSON.stringify(updatedOptions) };
+                return { ...item, options: JSON.stringify(updatedOptions), answer: updatedans };
             } else {
                 return item;
             }
@@ -70,26 +80,36 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
 
     //await Quiz.findByIdAndUpdate(quizId, { $set: { fieldToUpdate: newValue } });
 
-    // const submit = async () => {
-    //     alert(JSON.stringify(questiona));
-    //     await Quiz.findByIdAndUpdate(quizId, { $set: { question: questiona } });
+    const handleSubmit = async (e: any) => {
+        e.preventDefault()
+        const isEmptyQuestion = questions.some(question => question.question.trim() === "");
+        if (isEmptyQuestion) {
+            alert("Please fill in all questions");
+            return;
+        }
 
-    //     const response = await fetch(/api/auth / reset - quiz / ${ quizId }, {
-    //         method: "PUT",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(questiona),
-    //     });
+        // Check if any option is empty
+        const isEmptyOption = questions.some(question => {
+            const optionsArr = JSON.parse(question.options);
+            return optionsArr.some((option: string) => option.trim() === "");
+        });
+        if (isEmptyOption) {
+            alert("Please fill in all options");
+            return;
+        }
 
-    //     const data = await response.json();
-    //     console.log(data);
+        const response = await axios.post('/api/quiz/savequiz', {
+            quizObj: quiz,
+            questionArr: questions
+        })
 
-    //     if (response.ok) {
-    //         alert(JSON.stringify(data));
-    //         //redirect to another page with string passed by me  "ABC"
-    //     }
-    // };
+        if (response.status == 200) {
+            const quizId = response.data.quizId;
+            router.push(`/take-quiz/mcq/${quizId}`)
+        }
+
+
+    }
 
     return (
         <>
@@ -107,10 +127,10 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                             {questions.map((question, questionIndex) => (
                                 <>
                                     <div className=" text-white">Question:{questionIndex + 1}</div>
-                                    <textarea
+                                    <textarea required
                                         className="w-full rounded-md p-2 m-3"
                                         defaultValue={question.question}
-                                        onChange={(e) =>handleQuestion(questionIndex, e.target.value)}
+                                        onChange={(e) => handleQuestion(questionIndex, e.target.value)}
                                     />
                                     <br />
 
@@ -118,17 +138,19 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                                         {JSON.parse(question.options).map(
                                             (option: string, index: number) => (
                                                 <>
-                                                    <input 
+                                                    <input required
                                                         key={index}
-                                                        className={`rounded-md p-2 m-3 ${option === question.answer ? "bg-green-500" : ""
-                                                            }`}
+                                                        className={`rounded-md p-2 m-3 ${option.trim() === question.answer.trim() ? "bg-green-500" : ""}
+                                                        ${option.trim() == "" ? "bg-red-500" : ""}`
+                                                        }
                                                         defaultValue={option}
-                                                        onChange={(e) =>
+                                                        onChange={(e) => {
                                                             handleOptions(
                                                                 questionIndex,
                                                                 index,
                                                                 e.target.value
                                                             )
+                                                        }
                                                         }
                                                     />
                                                 </>
@@ -144,7 +166,7 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                                 <Link href="/" className="text-center">
                                     <button
                                         className="mt-1 mx-2 block px-2 py-3 text-white font-bold bg-gray-900 rounded-full border-solid border-2 hover:bg-white hover:text-gray-900 sm:ml-2 dm:mt-5 text-center"
-                                        onClick={()=>{alert('submit')}}
+                                        onClick={(e) => { handleSubmit(e) }}
                                     >
                                         Submit
                                     </button>
@@ -154,7 +176,9 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                     </Card>
                 </>
             )}
-            {JSON.stringify(questionArr)}
+
+            {questions.map((item) => { return (item.options) })}
+            {questions.map((item) => { return (item.answer) })}
         </>
     )
 }
