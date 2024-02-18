@@ -17,8 +17,10 @@ import Loader from '../../Loader';
 //     type: 'mcq' | 'blanks'
 //     amount: number
 // }
-
-function QuizCreation() {
+type Props = {
+    shared: boolean
+}
+function QuizCreation({ shared = true }: Props) {
 
     const router = useRouter()
     const [selectedType, setSelectedType] = useState<'mcq' | 'blanks'>('mcq');
@@ -40,44 +42,57 @@ function QuizCreation() {
         amount: 1
     })
 
+    const createQueryString = (name: string, value: string) => {
+        const params = new URLSearchParams();
+        params.set(name, value);
+        return params.toString();
+    };
+
     const submit = async () => {
-        // alert(JSON.stringify(quizState))
-        try {
-            setLoading(true)
-            const response = await fetch('/api/quiz', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(quizState),
-            });
-            
-            const data = await response.json();
-            console.log(data)
-            const quizId = data.quizId
-
-            setLoading(false)
-
-            if (response.ok) {
-                if (quizState.type === 'mcq') {
-                    router.push(`/take-quiz/mcq/${quizId}`)
-                } else if(quizState.type === 'blanks'){
-                    router.push(`/take-quiz/blanks/${quizId}`)
-                }
+        setLoading(true)
+        if (shared) {
+            if (quizState.type === 'mcq') {
+                router.push("/create-quiz/mcq" + "?" + createQueryString("obj", JSON.stringify(quizState)));
             } else {
-                console.log(data)
+                
             }
-            
-        } catch (err) {
-            toast.error('something went wrong', {
-                position: 'bottom-right'
-            });
+        } else {
+            try {
+                const response = await fetch('/api/quiz', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(quizState),
+                });
+
+                const data = await response.json();
+                console.log(data)
+                const quizId = data.quizId
+
+                setLoading(false)
+
+                if (response.ok) {
+                    if (quizState.type === 'mcq') {
+                        router.push(`/take-quiz/mcq/${quizId}`)
+                    } else if (quizState.type === 'blanks') {
+                        router.push(`/take-quiz/blanks/${quizId}`)
+                    }
+                } else {
+                    console.log(data)
+                }
+
+            } catch (err) {
+                toast.error('something went wrong', {
+                    position: 'bottom-right'
+                });
+            }
         }
     }
 
     return (
         <>
-            {isLoading && <Loader/>}
+            {isLoading && <Loader />}
             {!isLoading && (<div className="flex items-center justify-center px-4 sm:px-6 h-screen sm:py-16 lg:px-8 lg:py-24">
                 <Card className='bg-gray-900 rounded-3xl px-7 py-7'>
                     <CardHeader>
@@ -188,7 +203,7 @@ function QuizCreation() {
                                         onClick={submit}
                                         disabled={isLoading}
                                     >
-                                        {isLoading ? "Please wait" :"Generate Quiz"}
+                                        {isLoading ? "Please wait" : "Generate Quiz"}
                                     </button>
                                 </div>
                             </div>
@@ -196,7 +211,7 @@ function QuizCreation() {
                     </CardBody>
                 </Card>
             </div>)}
-            <ToastContainer/>
+            <ToastContainer />
         </>
     )
 }

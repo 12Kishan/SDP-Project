@@ -8,7 +8,7 @@ const QuizType = {
 const questionSchema = new Schema({
   question: { type: String, required: true },
   answer: { type: String, required: true },
-quizId: { type: mongoose.Types.ObjectId, ref: "Quiz"/*, required: true*/ },
+quizId: { type: mongoose.Types.ObjectId/*, required: true*/ },
   options: { type: String , default: undefined }, // For MCQ
   percentageCorrect: { type: Number }, // For blanks
   questionType: { type: String, enum: Object.values(QuizType) },
