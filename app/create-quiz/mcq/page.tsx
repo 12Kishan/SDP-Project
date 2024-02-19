@@ -5,6 +5,7 @@ import axios from 'axios'
 import Loader from "@/app/components/Loader";
 import CreateMCQ from '@/app/components/quizComponent/CreateMCQ';
 import { useSearchParams } from "next/navigation";
+import { DashboardLayout } from "@/app/dashboard/Layout";
 
 
 function CreateMcqQuiz() {
@@ -70,7 +71,9 @@ function CreateMcqQuiz() {
     // },[])
     return <>
         {loading && <Loader />}
-        {!loading && <CreateMCQ quizObj={quizObj} questionArr={questionArr}/>}
+        {!loading && <DashboardLayout title='Create for others'>
+            <CreateMCQ quizObj={quizObj} questionArr={questionArr} />
+        </DashboardLayout>}
         {/* {JSON.stringify(quizObj)}
         {JSON.stringify(questionArr)} */}
     </>
