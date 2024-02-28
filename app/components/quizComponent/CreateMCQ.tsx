@@ -102,7 +102,7 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
 
             if (response.status == 200) {
                 const quizId = response.data.quizId;
-                alert(`${ process.env.APP_URL }/take-quiz/mcq/${quizId}`)
+                alert(`https://sdp-project-1.vercel.app/take-quiz/mcq/${quizId}`)
             }
         } catch (err) {
             alert('Error')   
