@@ -7,13 +7,13 @@ export const metadata = {
 }
 
 function QuizPage() {
-  return (
-    <DashboardLayout title='Fill the form'>
-      <div className=" rounded-3xl bg-gray-800 p-6 lg:w-full">
-        <QuizCreation shared={false} />
-      </div>
-    </DashboardLayout>
-  )
+    return (
+        <DashboardLayout title='Fill the form'>
+            <div className=" rounded-3xl bg-gray-800 p-6 lg:w-full">
+                <QuizCreation shared={true} />
+            </div>
+        </DashboardLayout>
+    )
 }
 
 export default QuizPage

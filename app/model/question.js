@@ -10,10 +10,7 @@ const questionSchema = new Schema({
   answer: { type: String, required: true },
   quizId: { type: mongoose.Types.ObjectId/*, required: true*/ },
   questionType: { type: String, enum: Object.values(QuizType) },
-  options: { type: String , default: undefined }, // For MCQ
-  // percentageCorrect: { type: Number }, // For blanks
-  // userAnswer: { type: String },
-  // isCorrect: { type: Boolean },
+  options: { type: String , default: undefined },
 });
 
 const Question = mongoose.models.Questions || mongoose.model("Questions", questionSchema);

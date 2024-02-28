@@ -35,9 +35,6 @@ function Quiz() {
                       <Heading size='xs'>
                         topic 1
                       </Heading>
-                      {/* <Text>
-                        70%
-                      </Text> */}
                     </Box>
                     <Box>
                       <Heading size='xs'>
@@ -60,7 +57,7 @@ function Quiz() {
                   <Text className='text-start text-white font-normal py-2 mx-8'>
                     Just give the name of topic, number of questions, set questions types, and select difficulty level to generate quiz using AI.
                   </Text>
-                  <Link href='/dashboard/quiz' className="mt-1 mx-8 block px-3 rounded-full py-3 text-white font-bold bg-gray-900 border-solid border-2 hover:bg-white hover:text-white mb-1 sm:ml-2 dm:mt-5 text-center">
+                <Link href='/dashboard/quiz' className='flex items-center text-center justify-center bg-gray-900 p-3 rounded-md hover:bg-gray-700 mr-5 text-white'>
                     Generate quiz
                   </Link>
                 </CardBody>

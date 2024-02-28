@@ -8,5 +8,4 @@ const quizUserSchema = new Schema({
   timeTaken: { type: String },
 });
 
-export const QuizUsers =
-  mongoose.models.QuizUser || mongoose.model("QuizUser", quizUserSchema);
+export const QuizUsers = mongoose.models.QuizUser || mongoose.model("QuizUser", quizUserSchema);

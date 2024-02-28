@@ -12,11 +12,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import Loader from '../../Loader';
 
-// type Input = {
-//     topic: string
-//     type: 'mcq' | 'blanks'
-//     amount: number
-// }
 type Props = {
     shared: boolean
 }
@@ -93,7 +88,7 @@ function QuizCreation({ shared = false }: Props) {
     return (
         <>
             {isLoading && <Loader />}
-            {!isLoading && (<div className="flex items-center justify-center px-4 sm:px-6 h-screen sm:py-16 lg:px-8 lg:py-24">
+            {!isLoading && (<div className="flex items-center justify-center">
                 <Card className='bg-gray-900 rounded-3xl px-7 py-7'>
                     <CardHeader>
                         <h2 className="text-center text-3xl font-bold leading-tight text-white">
@@ -196,10 +191,10 @@ function QuizCreation({ shared = false }: Props) {
                                     </button>
                                 </div>
 
-                                <div>
+                                <div className='w-full flex justify-center'>
                                     <button
                                         type="button"
-                                        className={`inline-flex w-full items-center justify-center text-white border-solid border-2 hover:bg-white hover:text-gray-900 rounded-full bg-transparent px-3.5 py-2.5 font-semibold leading-7`}
+                                        className='flex w-full items-center justify-center gap-x-2 bg-gray-800 p-3 rounded-md hover:bg-gray-700 text-white'
                                         onClick={submit}
                                         disabled={isLoading}
                                     >

@@ -8,9 +8,6 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react';
 
-
-
-
 type Props = {
     quizObj: any
     questionArr: any
@@ -97,18 +94,19 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
             alert("Please fill in all options");
             return;
         }
+        try {
+            const response = await axios.post('/api/quiz/savequiz', {
+                quizObj: quiz,
+                questionArr: questions
+            })
 
-        const response = await axios.post('/api/quiz/savequiz', {
-            quizObj: quiz,
-            questionArr: questions
-        })
-
-        if (response.status == 200) {
-            const quizId = response.data.quizId;
-            router.push(`/take-quiz/mcq/${quizId}`)
+            if (response.status == 200) {
+                const quizId = response.data.quizId;
+                alert(`${ process.env.APP_URL }/take-quiz/mcq/${quizId}`)
+            }
+        } catch (err) {
+            alert('Error')   
         }
-
-
     }
 
     return (
@@ -176,9 +174,6 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                     </Card>
                 </>
             )}
-
-            {questions.map((item) => { return (item.options) })}
-            {questions.map((item) => { return (item.answer) })}
         </>
     )
 }

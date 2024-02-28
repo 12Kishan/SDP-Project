@@ -44,38 +44,11 @@ function CreateMcqQuiz() {
         }
         fetchData()
     },[])
-    // useEffect(() => {
-    //     setQuizObj({
-    //         type: "mcq",
-    //         topic: "javascript",
-    //         difficulty: "easy",
-    //         shared: true
-    //     })  
-    //     setQuestionArr(
-    //         [
-    //             {
-    //                 questionType: "mcq",
-    //                 question: "Which keyword is used to declare a variable in JavaScript?",
-    //                 answer: "var",
-    //                 options: "[\"var\",\"let\",\"const\",\"string\"]"
-    //             },
-    //             {
-    //                 questionType: "mcq",
-    //                 question: "Which operator is used for concatenation in JavaScript?",
-    //                 answer: "+",
-    //                 options: "[\"+\",\"-\",\"*\",\"/\"]"
-    //             }
-    //         ]
-    //     )
-    //     setLoading(false)
-    // },[])
     return <>
         {loading && <Loader />}
         {!loading && <DashboardLayout title='Create for others'>
             <CreateMCQ quizObj={quizObj} questionArr={questionArr} />
         </DashboardLayout>}
-        {/* {JSON.stringify(quizObj)}
-        {JSON.stringify(questionArr)} */}
     </>
 }
 

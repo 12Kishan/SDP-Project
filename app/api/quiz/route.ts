@@ -36,7 +36,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             userId: new mongoose.Types.ObjectId(session.user.id),
             topic: topic,
             difficulty: difficulty || QuizDifficulty.Easy,
-            shared:true
+            shared:false
         })
         console.log('quiz created')
 
