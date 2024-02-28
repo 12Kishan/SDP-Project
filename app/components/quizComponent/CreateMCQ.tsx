@@ -38,7 +38,7 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
     useEffect(() => {
 
         setQuestions(questionArr);
-        setQuiz({ ...quizObj, shared: true, userId:data?.user.id});
+        setQuiz({ ...quizObj, shared: true, userId: data?.user.id });
         console.log("useEffect called in crete mcq");
         setLoading(false);
     }, []);
@@ -75,6 +75,11 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
         setQuestions(newQuestions);
     };
 
+    const handleDelete = (indexOfQuestion: number) => {
+        const newQuestions = questions.filter((item, index) => index !== indexOfQuestion);
+        setQuestions(newQuestions);
+    }
+
     //await Quiz.findByIdAndUpdate(quizId, { $set: { fieldToUpdate: newValue } });
 
     const handleSubmit = async (e: any) => {
@@ -102,10 +107,11 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
 
             if (response.status == 200) {
                 const quizId = response.data.quizId;
-                alert(`https://sdp-project-1.vercel.app/take-quiz/mcq/${quizId}`)
+                // alert(`https://sdp-project-1.vercel.app/take-quiz/mcq/${quizId}`)
+                alert(`https://sdp-project-1.netlify.app/take-quiz/mcq/${quizId}`)
             }
         } catch (err) {
-            alert('Error')   
+            alert('Error')
         }
     }
 
@@ -124,7 +130,17 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
 
                             {questions.map((question, questionIndex) => (
                                 <>
-                                    <div className=" text-white">Question:{questionIndex + 1}</div>
+                                    <div className="text-white flex justify-between">
+                                    <div className=" text-white">
+                                        Question:{questionIndex + 1}
+                                    </div>
+                                    <button
+                                        className="hover:text-red-500"
+                                        onClick={(e) => handleDelete(questionIndex)}
+                                    >
+                                        Remove
+                                    </button>
+                                </div >
                                     <textarea required
                                         className="w-full rounded-md p-2 m-3"
                                         defaultValue={question.question}
