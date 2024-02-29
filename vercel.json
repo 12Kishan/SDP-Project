@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/questions/route.ts": {
-      "timeout": 60
+      "maxDuration": 30
     }
   }
 }
