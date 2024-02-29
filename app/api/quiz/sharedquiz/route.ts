@@ -6,8 +6,9 @@ import axios from "axios";
 import { QuizType } from "@/app/model/question";
 import { QuizDifficulty } from "@/app/model/quiz";
 import { ZodError } from "zod";
+import { error } from "console";
 
-export async function POST(req: NextRequest, res: NextResponse){
+export async function POST(req: NextRequest, res: NextResponse) {
     try {
         // const session = await getServerSession(authOptions)
         // if (!session?.user) {
@@ -26,7 +27,11 @@ export async function POST(req: NextRequest, res: NextResponse){
         const generatedQuestions = await axios.post(`${process.env.APP_URL}/api/questions`, {
             amount, topic, type, difficulty
         })
-
+        if (generatedQuestions.status == 500) {
+            return NextResponse.json({
+                error: 'Internal server error'
+            }, { status: 401 })
+        }
         const quizObj = {
             // userId:session?.user.id,
             type: type || QuizType.MCQ,
@@ -56,7 +61,7 @@ export async function POST(req: NextRequest, res: NextResponse){
             return NextResponse.json({
                 quizObj: quizObj,
                 questionArr: mcqArray
-            },{status:200})
+            }, { status: 200 })
         } else if (type === 'blanks') {
             type Blank = {
                 question: string

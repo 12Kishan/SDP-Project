@@ -44,7 +44,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const generatedQuestions = await axios.post(`${process.env.APP_URL}/api/questions`, {
             amount, topic, type, difficulty
         })
-
+        if (generatedQuestions.status == 500) {
+            return NextResponse.json({
+                error: 'Internal server error'
+            }, { status: 500 })
+        }
         if (type === 'mcq') {
             type MCQ = {
                 question: string

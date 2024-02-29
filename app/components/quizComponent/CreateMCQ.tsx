@@ -129,18 +129,18 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                             <br />
 
                             {questions.map((question, questionIndex) => (
-                                <>
+                                <div key={questionIndex}>
                                     <div className="text-white flex justify-between">
-                                    <div className=" text-white">
-                                        Question:{questionIndex + 1}
-                                    </div>
-                                    <button
-                                        className="hover:text-red-500"
-                                        onClick={(e) => handleDelete(questionIndex)}
-                                    >
-                                        Remove
-                                    </button>
-                                </div >
+                                        <div className=" text-white">
+                                            Question:{questionIndex + 1}
+                                        </div>
+                                        <button
+                                            className="hover:text-red-500"
+                                            onClick={(e) => handleDelete(questionIndex)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div >
                                     <textarea required
                                         className="w-full rounded-md p-2 m-3"
                                         defaultValue={question.question}
@@ -172,19 +172,17 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                                         )}
                                     </div>
                                     <br />
-                                </>
+                                </div>
                             ))}
 
                             {/* add the button here */}
                             <div className="flex justify-center items-center mt-4 ">
-                                <Link href="/" className="text-center">
                                     <button
-                                        className="mt-1 mx-2 block px-2 py-3 text-white font-bold bg-gray-900 rounded-full border-solid border-2 hover:bg-white hover:text-gray-900 sm:ml-2 dm:mt-5 text-center"
+                                        className='flex items-center justify-center px-6 bg-gray-800 p-3 rounded-md hover:bg-gray-700 text-white'
                                         onClick={(e) => { handleSubmit(e) }}
                                     >
                                         Submit
                                     </button>
-                                </Link>
                             </div>
                         </div>
                     </Card>

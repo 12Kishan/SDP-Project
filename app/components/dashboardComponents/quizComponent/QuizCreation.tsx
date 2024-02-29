@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react'
 import { BiSelectMultiple } from "react-icons/bi";
 import { AiOutlineEdit } from "react-icons/ai";
-import { ToastContainer, toast } from 'react-toastify';
+import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/navigation';
 import Loader from '../../Loader';
 
@@ -43,13 +43,15 @@ function QuizCreation({ shared = false }: Props) {
         return params.toString();
     };
 
-    const submit = async () => {
+    const submit = async (e: any) => {
+        e.preventDefault()
         setLoading(true)
         if (shared) {
+            setLoading(false)
             if (quizState.type === 'mcq') {
                 router.push("/create-quiz/mcq" + "?" + createQueryString("obj", JSON.stringify(quizState)));
             } else {
-                
+
             }
         } else {
             try {
@@ -61,20 +63,35 @@ function QuizCreation({ shared = false }: Props) {
                     body: JSON.stringify(quizState),
                 });
 
-                const data = await response.json();
-                console.log(data)
-                const quizId = data.quizId
+                if (response.status == 200) {
+                    const data = await response.json();
+                    console.log(data)
+                    const quizId = data.quizId
 
-                setLoading(false)
+                    setLoading(false)
 
-                if (response.ok) {
-                    if (quizState.type === 'mcq') {
-                        router.push(`/take-quiz/mcq/${quizId}`)
-                    } else if (quizState.type === 'blanks') {
-                        router.push(`/take-quiz/blanks/${quizId}`)
+                    if (response.ok) {
+                        if (quizState.type === 'mcq') {
+                            router.push(`/take-quiz/mcq/${quizId}`)
+                        } else if (quizState.type === 'blanks') {
+                            router.push(`/take-quiz/blanks/${quizId}`)
+                        }
+                    } else {
+                        console.log(data)
                     }
                 } else {
-                    console.log(data)
+                    toast.error('Something went wrong', {
+                        style: {
+                            border: '2px solid #111827',
+                            padding: '16px',
+                            color: '#fff',
+                            background: 'red'
+                        },
+                        iconTheme: {
+                            primary: 'white',
+                            secondary: 'red',
+                        },
+                    })
                 }
 
             } catch (err) {
@@ -195,7 +212,7 @@ function QuizCreation({ shared = false }: Props) {
                                     <button
                                         type="button"
                                         className='flex w-full items-center justify-center gap-x-2 bg-gray-800 p-3 rounded-md hover:bg-gray-700 text-white'
-                                        onClick={submit}
+                                        onClick={(e) => submit(e)}
                                         disabled={isLoading}
                                     >
                                         {isLoading ? "Please wait" : "Generate Quiz"}
@@ -206,7 +223,10 @@ function QuizCreation({ shared = false }: Props) {
                     </CardBody>
                 </Card>
             </div>)}
-            <ToastContainer />
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
         </>
     )
 }
