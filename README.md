@@ -1,1 +1,1 @@
-[QuizBee](https://project.vercell.app/)
+[QuizBee](https://project.vercel.app/)
