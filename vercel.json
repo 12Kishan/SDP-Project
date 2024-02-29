@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/questions/route.ts": {
+      "timeout": 60
+    }
+  }
+}
