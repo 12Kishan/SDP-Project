@@ -16,6 +16,7 @@ type Props = {
 function CreateMCQ({ quizObj, questionArr }: Props) {
 
     const router = useRouter();
+    const [QuizId, setQuizId] = useState("")
     const { data } = useSession()
     const [loading, setLoading] = useState(true);
     const [quiz, setQuiz] = useState({
@@ -34,7 +35,11 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
         }
     ]);
 
-
+    useEffect(() => {
+        if (QuizId != "") {
+            router.push(`/create-quiz/share/${QuizId}`)
+        }
+    },[QuizId])
     useEffect(() => {
 
         setQuestions(questionArr);
@@ -107,7 +112,9 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
 
             if (response.status == 200) {
                 const quizId = response.data.quizId;
-                alert(`https://sdp-project-1.vercel.app/take-quiz/mcq/${quizId}`)
+                setQuizId(quizId)
+                // alert(`https://sdp-project-1.vercel.app/take-quiz/mcq/${quizId}`)
+                // alert(`http://localhost:3000/take-quiz/mcq/${quizId}`)
                 // alert(`https://sdp-project-1.netlify.app/take-quiz/mcq/${quizId}`)
             }
         } catch (err) {
@@ -129,7 +136,7 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                             <br />
 
                             {questions.map((question, questionIndex) => (
-                                <div key={questionIndex}>
+                                <div key={question.question}>
                                     <div className="text-white flex justify-between">
                                         <div className=" text-white">
                                             Question:{questionIndex + 1}

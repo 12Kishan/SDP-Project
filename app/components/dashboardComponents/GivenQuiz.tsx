@@ -2,7 +2,7 @@
 
 import { Quiz } from '@/app/model/quiz';
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { IoIosArrowForward } from "react-icons/io";
 
 type Props = {
@@ -12,26 +12,7 @@ type Props = {
 async function GivenQuiz({ quizuser }: Props) {
     
     const mainQuiz = await Quiz.findById({ _id: quizuser.quizId })
-    // const [fetched, setFetched] = useState(false)
-    // const [mainQuiz, setMainQuiz] = useState({
-    //     _id: '',
-    //     userId: '',
-    //     shared: false,
-    //     topic: '',
-    //     type: 'mcq',
-    //     difficulty: 'easy',
-    //     questions: [],
-    // })
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const res = await Quiz.findById({ _id: quiz.id })
-    //         setMainQuiz({ ...res })
-    //         setFetched(true)
-    //     }
-    //     fetchData()
-    //     console.log('given ');
 
-    // }, [])
     return (
         <>
             <div className="p-4 bg-gray-800 rounded-lg">

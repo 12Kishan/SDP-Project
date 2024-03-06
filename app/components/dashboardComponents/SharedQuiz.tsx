@@ -23,7 +23,7 @@ async function SharedQuiz({ quiz }: Props) {
                 </div>
                 <div className="mt-5 flex items-center justify-between">
                     {/* <div className="">{quiz.timeTaken}</div> */}
-                    <Link href='/dashboard' className='flex items-center justify-center gap-x-2 bg-gray-900 p-2 rounded-md hover:bg-gray-700'>
+                    <Link href={`/responses/${quiz._id}`} className='flex items-center justify-center gap-x-2 bg-gray-900 p-2 rounded-md hover:bg-gray-700'>
                         <div className="">more</div>
                         <IoIosArrowForward />
                     </Link>
