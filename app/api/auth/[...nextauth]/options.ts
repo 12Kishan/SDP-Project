@@ -7,10 +7,9 @@ import { User } from "@/app/model/user";
 connect()
 declare module 'next-auth' {
     interface Session extends DefaultSession {
-        user:{
+        user: {
             id: string;
             isAdmin: boolean;
-            date:Date;
         } & DefaultSession['user']
     }
 }
@@ -19,7 +18,6 @@ export type myUser = {
     name?: string | null;
     email?: string | null;
     isAdmin?: boolean | null;
-    date?:Date;
 }
 
 export type mySession = {
@@ -38,19 +36,14 @@ export const authOptions: NextAuthOptions = {
     },
     callbacks: {
         async jwt({ token }){
-            // console.log(user : ${user})
+            // console.log(`user : ${user}`)
             // const user = await User.findOne({ email: token.user?.email })
-            const tokenUser = await User.findOne({ email: token.email })
             if (token.isAdmin === undefined) {
-                
+                const tokenUser = await User.findOne({ email: token.email })
                 if (tokenUser) {
                     token.isAdmin = tokenUser.isAdmin
-                    console.log(tokenUser.date)
-                    token.date=tokenUser.date
                 }
             }
-            
-            token.date=tokenUser.date
             console.log(`token : `, token)
             // console.log("both :", { ...token, ...user })
             return token;
@@ -59,8 +52,7 @@ export const authOptions: NextAuthOptions = {
             const user = await User.findOne({ email: session.user?.email })
             session.user.isAdmin = user.isAdmin
             session.user.id = user._id
-            session.user.date=user.date
-            console.log(session)
+            console.log('session : ', session)
             return session
         },
         async signIn({ user, account, profile, email, credentials }) {
@@ -109,6 +101,6 @@ export const authOptions: NextAuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!
-        })
-    ]
+        })
+    ]
 }

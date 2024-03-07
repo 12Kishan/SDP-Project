@@ -1,3 +1,6 @@
+import { QuestionUser } from "@/app/model/question_user";
+import { Quiz } from "@/app/model/quiz";
+import { QuizUsers } from "@/app/model/quiz_user";
 import { User } from "@/app/model/user";
 import { NextResponse } from "next/server";
 
@@ -5,6 +8,17 @@ export async function DELETE(request:any,{ params }:any) {
 
     try {
         await User.deleteOne({ _id: params.userId });
+        await QuizUsers.deleteMany({userId:params.userId});
+
+        const quizuser =await QuizUsers.find({useId:params.userId});
+
+        await Promise.all(quizuser.map(async(quizuser)=>{
+            if(!quizuser.shared){
+                await Quiz.deleteOne({_id:quizuser.quizId});
+            }
+            await Quiz.deleteOne({_id:quizuser._id});
+        }))
+        await QuestionUser.deleteMany({userId:params.userId});
         return NextResponse.json({
             message: "user deleted",
             success: true

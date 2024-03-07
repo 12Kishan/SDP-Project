@@ -12,9 +12,8 @@ const QuizDifficulty = {
 };
 
 const quizSchema = new Schema({
-    userId: { type: mongoose.Types.ObjectId, ref: "User", required: true },
-    timeStarted: { type: Date, required: true },
-    timeEnded: { type: Date },
+    userId: { type: mongoose.ObjectId },
+    shared: { type: Boolean, default: false },
     topic: { type: String, required: true },
     type: { type: String, enum: Object.values(QuizType), default: QuizType.MCQ },
     difficulty: {
@@ -64,4 +63,4 @@ export { Quiz, QuizType, QuizDifficulty };
 
 // const Quiz = mongoose.models.Quizzes || mongoose.model("Quizzes", quizSchema);
 
-// module.exports = { Quiz, QuizType, QuizDifficulty };
+// module.exports = { Quiz, QuizType, QuizDifficulty };

@@ -5,25 +5,11 @@ import Image from 'next/image';
 import SignInBtn from '../Buttons/signInBtn';
 import SignOutBtn from '../Buttons/signOutBtn';
 import { useSession } from 'next-auth/react';
-import Service from './HeaderComponents/services';
-import About from './HeaderComponents/about';
-import Contact from './HeaderComponents/contactus'
+import ReactLoading from 'react-loading';
 
 function Header() {
   const { data } = useSession()
   const [isOpen, setIsOpen] = useState(false);
-  const [openservices,setopenservices] = useState(false);
-  
-  const Menus = [
-    { title: "Home" },
-    { title: "Quiz"},
-    { title: "Generate Quiz"},
-    { title: "History"},
-    ];
-
-
-
-
   return (<>
     <div className="bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
       <div className="flex items-center justify-between px-4 py-3 sm:p-0">
@@ -44,18 +30,14 @@ function Header() {
         </div>
       </div>
       <nav className={`${isOpen ? 'block' : 'hidden'} px-2 pt-2 pb-4 sm:flex sm:p-0 items-center`}>
-        <Link href="" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">Quiz</Link>
-        <Service/>
-        <Contact/>
-        <About/>
+        <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">Quiz</Link>
+        <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">Service</Link>
+        <Link href="#" className="mt-1 mx-2 block px-2 py-3 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2">About</Link>
+
         {data && <SignOutBtn />}
         {!data && <SignInBtn />}
       </nav>
     </div>
-
-    {
-      openservices && (<Service/>)
-    }
   </>
   )
 }
