@@ -22,17 +22,17 @@ function Home() {
 
   return (
     <DashboardLayout title='Admin Home'>
-      <div className="pt-5 md:pt-20 lg:pt-30 h-screen overflow-y-scroll text-white">
+      <div className="pt-5 md:pt-20 lg:pt-30 h-full text-white bg-gray-700 rounded-lg ">
         <Grid
           templateRows="repeat(2, 1fr)"
           templateColumns="repeat(1, 1fr)"
           gap={30}
         >
-          <GridItem className="h-fit">
+          <GridItem className="h-fit ">
             <Center>
               <Card
                 align="center"
-                className="border-2 rounded-md w-full mx-5 md:mx-15 lg:mx-28 gap-4 py-3 shadow-xl"
+                className="border-2 rounded-md w-full mx-5 md:mx-15 lg:mx-28 gap-4 py-3 shadow-xl bg-gray-900"
               >
                 <CardHeader className="font-extrabold text-white">
                   <Heading className="text-center text-xl md:text-2xl lg:text-4xl">
@@ -64,7 +64,7 @@ function Home() {
                 direction={{ base: "row", sm: "column" }}
                 overflow="revert"
                 variant="outline"
-                className="border-2 shadow-xl rounded-md px-2 mx-5 md:mx-15 lg:mx-28 w-full flex items-center gap-4 py-3"
+                className=" bg-gray-900 border-2 shadow-xl rounded-md px-2 mx-5 md:mx-15 lg:mx-28 w-full flex items-center gap-4 py-3"
               >
                 <Stack>
                   <CardBody>
@@ -77,10 +77,13 @@ function Home() {
                       <Text className="text-start ml-4 text-sm md:text-base lg:text-l font-medium text-white">
                         - User Details
                         <br />
+                        - Admin List
+                        <br />
                         - Analysis
                         <br />
                         - Easy to manage
                         <br />
+      
                       </Text>
                     </CardBody>
                   </CardBody>
