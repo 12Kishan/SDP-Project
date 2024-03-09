@@ -194,14 +194,14 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                         }
                       />
                       <br />
+                     
                       <div className="text-center justify-between w-full mt-3">
                         {JSON.parse(question.options).map(
                           (option: string, index: number) => (
                             <input
                               required
                               key={index}
-                              className={`rounded-md m-2  p-2 mx-3${
-                                option.trim() === question.answer.trim()
+                              className={`rounded-md m-2  p-2 mx-3 ${option.trim() == question.answer.trim()
                                   ? "bg-green-500"
                                   : ""
                               }

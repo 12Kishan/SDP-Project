@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import {
   Center,
   Card,
@@ -16,9 +16,18 @@ import {
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { DashboardLayout } from "../Layout";
+import { useRouter } from "next/navigation";
 
 function Home() {
   const { data } = useSession();
+  const router = useRouter();
+
+  useEffect(()=>{
+    if(!data?.user.isAdmin)
+    {
+      return router.push('/dashboard')
+    }
+    },[])
 
   return (
     <DashboardLayout title='Admin Home'>
@@ -32,7 +41,7 @@ function Home() {
             <Center>
               <Card
                 align="center"
-                className="border-2 rounded-md w-full mx-5 md:mx-15 lg:mx-28 gap-4 py-3 shadow-xl bg-gray-900"
+                className="border-2 rounded-md w-full mx-5 md:mx-15 lg:mx-28 gap-4 py-3 shadow-xl bg-gray-700"
               >
                 <CardHeader className="font-extrabold text-white">
                   <Heading className="text-center text-xl md:text-2xl lg:text-4xl">
@@ -64,7 +73,7 @@ function Home() {
                 direction={{ base: "row", sm: "column" }}
                 overflow="revert"
                 variant="outline"
-                className=" bg-gray-900 border-2 shadow-xl rounded-md px-2 mx-5 md:mx-15 lg:mx-28 w-full flex items-center gap-4 py-3"
+                className=" bg-gray-700 border-2 shadow-xl rounded-md px-2 mx-5 md:mx-15 lg:mx-28 w-full flex items-center gap-4 py-3"
               >
                 <Stack>
                   <CardBody>

@@ -9,12 +9,12 @@ import { ZodError } from "zod";
 
 export async function POST(req: NextRequest, res: NextResponse){
     try {
-        // const session = await getServerSession(authOptions)
-        // if (!session?.user) {
-        //     return NextResponse.json({
-        //         error: 'You must be logged in.'
-        //     }, { status: 401 })
-        // }
+        const session = await getServerSession(authOptions)
+        if (!session?.user) {
+            return NextResponse.json({
+                error: 'You must be logged in.'
+            }, { status: 401 })
+        }
 
         // console.log('session checked')
 

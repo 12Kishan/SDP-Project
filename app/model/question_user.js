@@ -9,4 +9,5 @@ const questionUserSchema = new Schema({
 });
 
 export const QuestionUser =
-    mongoose.models.QuestionUser || mongoose.model("QuestionUser", questionUserSchema);
+    mongoose.models.QuestionUser ||
+    mongoose.model("QuestionUser", questionUserSchema);

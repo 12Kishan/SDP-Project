@@ -157,7 +157,7 @@ export default function Page({ params: { quizId } }: Props) {
                         </div>
                     </div>
                 </div>
-                {JSON.stringify(mail, null, 2)}
+                
             </div>
             <Toaster
                 position="top-right"

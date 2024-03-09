@@ -21,7 +21,7 @@ export default function UservsMonth() {
     const fetchdata = useCallback(async () => {
         const res = await fetch("/api/users");
         const data = await res.json();
-        const parsedData: UserData[] = data.map((item:any) => ({
+        const parsedData: UserData[] = data.users.map((item:any) => ({
             ...item,
             date: new Date(item.date),
         }));

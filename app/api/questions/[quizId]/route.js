@@ -29,12 +29,12 @@ export async function GET(req, { params }) {
             return NextResponse.json({}, { status: 400 });
         }
 
-        const quiz = await Quiz.findOne({ _id: quizId }, { userId: 1, topic: 1, questions: 1 });
+        const quiz = await Quiz.findOne({ _id: quizId }, { userId: 1, topic: 1, questions: 1, shared: 1 });
 
         if (!quiz) {
             return NextResponse.json({}, { status: 400 });
         }
-        console.log(quiz)
+        console.log(quiz);
         const questions = await Question.find({ quizId: quizId });
         return NextResponse.json({ quiz, questions });
     } catch (error) {

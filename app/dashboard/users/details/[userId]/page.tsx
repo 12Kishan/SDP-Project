@@ -6,13 +6,19 @@ import Link from "next/link";
 import { Button, Box } from "@chakra-ui/react";
 import { DashboardLayout } from "@/app/dashboard/Layout";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type props = {
   params: {
     userId: string;
   };
 };
+
 const Userinfo = ({ params: { userId } }: props) => {
+
+  const router = useRouter();
+  const { data } = useSession();
   const [quizData, setquizesData] = useState([
     {
       _id: "",
@@ -38,10 +44,22 @@ const Userinfo = ({ params: { userId } }: props) => {
   }, []);
 
   useEffect(() => {
-    console.log("useEffect called");
-    fetchquizdata().catch(console.error);
-    fetchuserdata().catch(console.error);
-  }, [fetchquizdata, fetchuserdata]);
+    if(data?.user.isAdmin)
+    {
+      fetchquizdata().catch(console.error);
+      fetchuserdata().catch(console.error);
+    }
+    else
+    {
+      return router.push('/dashboard')
+    }
+    }, [fetchquizdata, fetchuserdata]);
+    useEffect(()=>{
+if(!data?.user.isAdmin)
+{
+  return router.push('/dashboard')
+}
+    },[])
 
   const removequiz = async (_id: String) => {
     const res = await fetch(`/api/quiz/${_id}`, {

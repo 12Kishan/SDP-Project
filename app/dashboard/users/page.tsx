@@ -13,11 +13,13 @@ import {
   AccordionPanel,
   Box,
 } from "@chakra-ui/react";
-import { toast } from "react-toastify";
+import { toast ,Toaster } from "react-hot-toast";
 import Link from "next/link";
 import { DashboardLayout } from "../Layout";
 import Loader from "@/app/components/Loader";
 import { ClassNames } from "@emotion/react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 
 function User() {
@@ -30,12 +32,8 @@ function User() {
       _id: "",
     },
   ]);
-
-//   const displaySuccessToast = (str: String) => {
-//     toast.success(str, {
-//       position: toast.POSITION.BOTTOM_LEFT,
-//     });
-//   };
+  const router = useRouter();
+  const { data } = useSession();
 const [loading,setloading] = useState(true);
   const removeUser = async (_id: String) => {
     const res = await fetch(`/api/users/${_id}`, {
@@ -45,10 +43,9 @@ const [loading,setloading] = useState(true);
       },
     });
 
-    const data = res.json();
     if (res.status == 200) {
       console.log("user is deleted");
-      //displaySuccessToast("user is deleted");
+      displaySuccessToast("user is deleted");
     } else {
       console.log("user not deleted");
     }
@@ -69,13 +66,40 @@ const [loading,setloading] = useState(true);
   const fetchdata = useCallback(async () => {
     const res = await fetch("/api/users");
     const data = await res.json();
-    setusersData(data);
+    setusersData(data.users);
+    
   }, []);
+  
 
   useEffect(() => {
-    fetchdata().catch(console.error);
-    setloading(false);
+    if(data?.user.isAdmin)
+    {
+      fetchdata().catch(console.error);
+       setloading(false);
+    }
+    else
+    {
+      return router.push('/dashboard');
+    }
+    
   }, [fetchdata]);
+
+  const displaySuccessToast = (str: string) => {
+    toast.success(str, {
+        style: {
+            border: '2px solid #111827',
+            padding: '16px',
+            color: '#fff',
+            background: 'green'
+        },
+        iconTheme: {
+            primary: 'white',
+            secondary: 'green',
+        },
+    })
+}
+
+
 
   const items = usersData.map((item) =>
   !item.isAdmin ? (
@@ -153,6 +177,10 @@ const [loading,setloading] = useState(true);
 {!loading &&<div className="">
       <div>{items}</div>
     </div>}
+    <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
     </DashboardLayout>
   );
 }

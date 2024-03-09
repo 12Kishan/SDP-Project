@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { answerSchema } from "@/validator/quizSchema";
 import { ZodError } from "zod";
 import { Question } from "@/app/model/question";
+import { QuizUsers } from "@/app/model/quiz_user";
+import { QuestionUser } from "@/app/model/question_user";
 import { compareTwoStrings } from 'string-similarity'
 import { Quiz } from "@/app/model/quiz";
 
@@ -11,10 +13,27 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const body = await req.json()
         console.log(body)
 
-        const { questionId, index, len, timeTaken, userAnswer } = answerSchema.parse(body)
+        const {
+            quizId,
+            userId,
+            questionId,
+            index,
+            len,
+            timeTaken,
+            userAnswer,
+            shared
+        } = answerSchema.parse(body)
         
-        const question = await Question.findOne({ _id: questionId })
+        const quizUser = await QuizUsers.findOne({ quizId: quizId, userId: userId, timeTaken:timeTaken })
+        if (quizUser) {
+            return NextResponse.json(
+                { error: 'Quiz already given', },
+                { status: 404 }
+            )
+        }
 
+        const question = await Question.findOne({ _id: questionId }, { answer: 1, questionType :1})
+        
         if (!question) {
             return NextResponse.json(
                 { error: 'question not found', },
@@ -22,35 +41,68 @@ export async function POST(req: NextRequest, res: NextResponse) {
             )
         }
 
-        if (index == len - 1) {
+        if (index == 0) {
+            await QuizUsers.create({
+                quizId,
+                userId,
+                shared,
+                timeStarted: new Date()
+            })
+        }else if (index == len - 1) {
             console.log('change here')
-            await Quiz.findOneAndUpdate(
-                { _id: question.quizId },
+            await QuizUsers.findOneAndUpdate(
+                { quizId: quizId, userId:userId },
                 { timeTaken: timeTaken }
             )
         }
 
-        await Question.findOneAndUpdate(
-            { _id: questionId },
-            { userAnswer: userAnswer }
-        )
+        // const createdObj = QuestionUser.create({
+        //     questionId,
+        //     userId,
+        //     userAnswer
+        // })
+
+        // await Question.findOneAndUpdate(
+        //     { _id: questionId },
+        //     { userAnswer: userAnswer }
+        // )
 
         if (question.questionType === 'mcq') {
             const isCorrect = question.answer.toLowerCase().trim() === userAnswer.toLowerCase().trim()
-            await Question.findOneAndUpdate(
-                { _id: questionId },
-                { isCorrect: isCorrect }
-            )
-
+            
+            const record = await QuestionUser.findOne({ questionId:questionId, userId:userId })
+            if (!record) {
+                await QuestionUser.create({
+                    questionId,
+                    userId,
+                    quizId,
+                    userAnswer,
+                    isCorrect
+                })
+            } else {
+                return NextResponse.json({
+                    message: "question is already attempted"
+                },{status: 205})
+            }
             return NextResponse.json({
                 isCorrect
             }, { status: 200 })
         } else if (question.questionType === 'blanks') {
             const percent = Math.round(compareTwoStrings(userAnswer.toLowerCase().trim(), question.answer.toLowerCase().trim()) * 100)
-            await Question.findOneAndUpdate(
-                { _id: questionId },
-                { percentageCorrect: percent, isCorrect: percent >= 70 ? true : false }
-            )
+            const record = await QuestionUser.findOne({ questionId: questionId, userId: userId })
+            if (!record) {
+                await QuestionUser.create({
+                    questionId,
+                    userId,
+                    quizId,
+                    userAnswer,
+                    isCorrect: percent >= 70 ? true : false
+                })
+            } else {
+                return NextResponse.json({
+                    message: "question is already attempted"
+                }, { status: 205 })
+            }
             return NextResponse.json({
                 percent
             }, { status: 200 })
@@ -67,5 +119,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 { status: 400 }
             )
         }
+        return NextResponse.json(
+            { err },
+            { status: 400 }
+        )
     }
 }

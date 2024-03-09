@@ -1,12 +1,23 @@
 "use client"
-import React from "react";
+import React,{useEffect} from "react";
 import UservsMonth from "./Charts/UservsMonth";
 import QuizvsMonth from "./Charts/QuizesvsMonth";
 import { DashboardLayout } from "../Layout";
 import Content from "@/app/components/dbComponents/Content"
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
 
 function Analysis() {
 
+  const router = useRouter();
+  const { data } = useSession();
+  useEffect(()=>{
+    if(!data?.user.isAdmin)
+    {
+      return router.push('/dashboard')
+    }
+    },[])
 
 
   return (

@@ -38,6 +38,8 @@ export async function DELETE(request: any, { params }: any) {
   export async function GET(req:any, { params }: { params: { quizId : string } }){
 
     try{
+
+      
         console.log(params);
         const {quizId} = params;
         // Find quiz objects in QuizUsers based on quizId

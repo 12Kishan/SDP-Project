@@ -15,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import { DashboardLayout } from "../Layout";
 import Loader from "@/app/components/Loader";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 
 function User() {
@@ -30,17 +32,33 @@ function User() {
 
   const [loading,setloading] = useState(true);
   const fetcher = async (url: String) => {};
+  const { data } = useSession();
+  const router = useRouter();
 
   const fetchdata = useCallback(async () => {
     const res = await fetch("/api/users");
     const data = await res.json();
-    setusersData(data);
+    setusersData(data.users);
   }, []);
 
+  // useEffect(()=>{
+  //   if(!data?.user.isAdmin)
+  //   {
+  //     return router.push('/dashboard')
+  //   }
+  //   },[])
+
   useEffect(() => {
-    fetchdata().catch(console.error);
-    setloading(false);
+   
+
+      fetchdata().catch(console.error);
+      setloading(false);
+    
+    
   }, [fetchdata]);
+  
+
+  
 
   const items = usersData.map((item) =>
     item.isAdmin ? (

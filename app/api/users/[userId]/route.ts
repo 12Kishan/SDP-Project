@@ -2,11 +2,19 @@ import { QuestionUser } from "@/app/model/question_user";
 import { Quiz } from "@/app/model/quiz";
 import { QuizUsers } from "@/app/model/quiz_user";
 import { User } from "@/app/model/user";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { authOptions } from "../../auth/[...nextauth]/options";
 
 export async function DELETE(request:any,{ params }:any) {
 
     try {
+        const session = await getServerSession(authOptions)
+        if (!session?.user.isAdmin) {
+          return NextResponse.json({
+            error: 'You must be logged as admin.'
+          }, { status: 401 })
+        }
         await User.deleteOne({ _id: params.userId });
         await QuizUsers.deleteMany({userId:params.userId});
 
@@ -33,7 +41,14 @@ export async function DELETE(request:any,{ params }:any) {
 }
 
 export async function PUT(request:any, { params }:any) {
+
     try {
+        const session = await getServerSession(authOptions)
+        if (!session?.user.isAdmin) {
+          return NextResponse.json({
+            error: 'You must be logged as admin.'
+          }, { status: 401 })
+        }
         const { userId } = params;
         const { isAdmin } = await request.json();
         const user = await User.findById(userId);
@@ -58,6 +73,7 @@ export async function PUT(request:any, { params }:any) {
 
 export async function GET(req:any, { params }: { params: { userId: string } }){
     try {   
+        
         console.log(params);
         const {userId} = params;
         const user = await User.findOne({_id:userId});

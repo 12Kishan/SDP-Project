@@ -14,14 +14,21 @@ import { FaHome } from "react-icons/fa";
 import ReactLoading from 'react-loading';
 import { formatTime } from '@/app/lib/utils';
 import { useTimer } from 'react-timer-hook';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 
 type Props = {
   quiz: any
-  questions: any
+  questions: any,
+  userId: string | undefined
 }
 
-function MCQ({ quiz, questions }: Props) {
+function MCQ({ quiz, questions, userId }: Props) {
+  const router = useRouter()
+  if (!userId) {
+    router.push('/login')
+  }
 
   const [index, setIndex] = useState(0)
   const [choice, setChoice] = useState(-1)
@@ -47,15 +54,29 @@ function MCQ({ quiz, questions }: Props) {
     if (loading)
       return
     if (choice == -1) {
-
+      toast.error("Please Select one option", {
+        style: {
+          border: '2px solid #111827',
+          padding: '16px',
+          color: '#fff',
+          background: 'red'
+        },
+        iconTheme: {
+          primary: 'white',
+          secondary: 'red',
+        },
+      })
     } else {
       try {
         const obj = {
           questionId: currQuestion._id,
+          quizId: quiz._id,
+          userId: userId,
           index: index,
           timeTaken: startTime ? formatTime(Math.floor(((expiryTimestamp.getTime() - startTime?.getTime()) / 1000))) : '',
           len: questions.length,
-          userAnswer: options[choice]
+          userAnswer: options[choice],
+          shared:quiz.shared
         }
         setLoading(true)
         const response = await fetch('/api/checkAnswer', {
@@ -68,8 +89,21 @@ function MCQ({ quiz, questions }: Props) {
 
         const data = await response.json();
         console.log(data)
-
         if (response.ok) {
+          if (data.status == 205) {
+            toast.error(data.message, {
+              style: {
+                border: '2px solid #111827',
+                padding: '16px',
+                color: '#fff',
+                background: 'red'
+              },
+              iconTheme: {
+                primary: 'white',
+                secondary: 'red',
+              },
+            })
+          }
           if (data.isCorrect) {
             setCorrect((prev) => prev + 1)
             toast.success('correct answer', {
@@ -167,7 +201,7 @@ function MCQ({ quiz, questions }: Props) {
               <div className="">You completed in {!startTime ? "" : formatTime(Math.floor(((expiryTimestamp.getTime() - startTime?.getTime()) / 1000)))}</div>
               <div className="mt-4 flex gap-x-3 justify-center items-center">
                 <Link href={'/dashboard'} className="bg-red-700 p-2 rounded-xl"><FaHome className='h-6 w-6' /></Link>
-                <Link href='/statistics/[userId]/[quizId]' as={`/statistics/${quiz.userId}/${quiz._id}`} className='flex flex-row gap-x-3 p-2 justify-center items-center bg-green-700 rounded-xl'>
+                <Link href='/statistics/[userId]/[quizId]' as={`/statistics/${userId}/${quiz._id}`} className='flex flex-row gap-x-3 p-2 justify-center items-center bg-green-700 rounded-xl'>
                   <RiLineChartFill />
                   <div>View statistics</div>
                 </Link>

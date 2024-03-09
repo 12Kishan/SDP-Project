@@ -9,6 +9,9 @@ export const quizSchema = z.object({
 
 export const answerSchema = z.object({
     questionId: z.string(),
+    quizId: z.string(),
+    userId: z.string(),
+    shared: z.boolean(),
     userAnswer: z.string(),
     index: z.number(),
     len: z.number(),

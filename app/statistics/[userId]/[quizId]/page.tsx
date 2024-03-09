@@ -38,7 +38,6 @@ const StatisticPage = async ({ params }: Props) => {
     }
     return (
         <>
-        
             <section className='bg-gray-800 h-screen overflow-y-scroll'>
                 <div className="flex items-center justify-center px-4 sm:px-6 py-6 lg:px-8 lg:py-8">
                     <div className="bg-gray-900 w-full mx-28 rounded-3xl px-7 py-7" >

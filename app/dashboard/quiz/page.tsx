@@ -1,5 +1,6 @@
 import React from 'react'
 import QuizCreation from '@/app/components/dashboardComponents/quizComponent/QuizCreation'
+import { DashboardLayout } from '../Layout'
 
 export const metadata = {
     title: "Quiz | QuizBee"
@@ -7,9 +8,11 @@ export const metadata = {
 
 function QuizPage() {
   return (
-    <div>
-        <QuizCreation shared={false}/>
-    </div>
+    <DashboardLayout title='Fill the form'>
+      <div className=" rounded-3xl bg-gray-800 p-6 lg:w-full">
+        <QuizCreation shared={false} />
+      </div>
+    </DashboardLayout>
   )
 }
 
