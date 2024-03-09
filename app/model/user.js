@@ -7,7 +7,9 @@ const userSchema = new Schema({
     password: String,
     emailVerified: Date,
     image: String,
-    isAdmin: { type: Boolean, default: false }
+    password_reset: String,
+    isAdmin: { type: Boolean, default: false },
+    date: { type: Date, default: new Date() }
 });
 
 export const User = mongoose.models.Users || mongoose.model("Users", userSchema);
