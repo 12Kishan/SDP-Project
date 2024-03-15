@@ -8,6 +8,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
+
 type Props = {
   quizObj: any;
   questionArr: any;
@@ -47,11 +48,12 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
   }, []);
 
   const handleQuestion = (id: number, question: string) => {
+
     const new_data = questions.map((item, index) =>
       index === id ? { ...item, question: question } : item
     );
     setQuestions(new_data);
-  };
+  }
 
   const handleOptions = (
     indexOfQuestion: number,
@@ -148,7 +150,7 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                   </li>
                   <li>
                     Input the correct answer in the first box; our system will
-                    shuffle answers.
+                    shuffle options.
                   </li>
                   <li>
                     Ensure all fields, including questions and answers, are
@@ -190,18 +192,23 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                         className="w-full rounded-md p-2"
                         defaultValue={question.question}
                         onChange={(e) =>
-                          handleQuestion(questionIndex, e.target.value)
+                          {e.preventDefault()
+                          handleQuestion(questionIndex, e.target.value)}
                         }
                       />
                       <br />
                      
-                      <div className="text-center justify-between w-full mt-3">
+                      <div className="text-center flex-col-reverse mt-3">
                         {JSON.parse(question.options).map(
                           (option: string, index: number) => (
+                          
+                            <>
+                            <div className="flex items-center">
+                            <p className="ml-3 text-white">{index == 0 ? "Answer" : `Option${index}`}</p>
                             <input
                               required
                               key={index}
-                              className={`rounded-md m-2  p-2 mx-3 ${option.trim() == question.answer.trim()
+                              className={`rounded-md m-2 w-full p-2 mx-3 ${option.trim() == question.answer.trim()
                                   ? "bg-green-500"
                                   : ""
                               }
@@ -215,6 +222,8 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                                 );
                               }}
                             />
+                            </div>
+                            </>
                           )
                         )}
                       </div>

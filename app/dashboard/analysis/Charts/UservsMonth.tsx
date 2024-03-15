@@ -62,7 +62,7 @@ export default function UservsMonth() {
     return (
         <>
             <h1 className="text-xl font-bold text-white ml-8 mt-8">Users</h1>
-            <Bar 
+            <Bar className="text-white"
                 data={{
                     labels: labels,
                     datasets: [
