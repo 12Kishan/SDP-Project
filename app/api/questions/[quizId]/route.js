@@ -19,11 +19,9 @@ export async function GET(req, { params }) {
         //     error: 'You must be logged in.'
         //   }, { status: 401 })
         // }
-        console.log("session checked");
 
-        console.log(params);
         const { quizId } = params;
-        console.log(quizId);
+
 
         if (!mongoose.Types.ObjectId.isValid(quizId)) {
             return NextResponse.json({}, { status: 400 });
@@ -34,11 +32,11 @@ export async function GET(req, { params }) {
         if (!quiz) {
             return NextResponse.json({}, { status: 400 });
         }
-        console.log(quiz);
+
         const questions = await Question.find({ quizId: quizId });
         return NextResponse.json({ quiz, questions });
     } catch (error) {
-        console.error(error);
+
         return NextResponse.json({ error: "Internal Server Error" });
     }
 }

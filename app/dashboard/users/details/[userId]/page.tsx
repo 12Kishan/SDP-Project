@@ -8,6 +8,7 @@ import { DashboardLayout } from "@/app/dashboard/Layout";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import toast,{Toaster} from "react-hot-toast";
 
 type props = {
   params: {
@@ -70,11 +71,42 @@ if(!data?.user.isAdmin)
     });
 
     if (res.status == 200) {
-      console.log("quiz is deleted");
+    
+      displaySuccessToast("quiz deleted");
     } else {
-      console.log("quiz not deleted");
+   
+      displayErrorToast("quiz is not deleted");
     }
   };
+
+  const displayErrorToast = (str: string) => {
+    toast.error(str, {
+        style: {
+            border: '2px solid #111827',
+            padding: '16px',
+            color: '#fff',
+            background: 'red'
+        },
+        iconTheme: {
+            primary: 'white',
+            secondary: 'red',
+        },
+    })
+}
+const displaySuccessToast = (str: string) => {
+  toast.success(str, {
+      style: {
+          border: '2px solid #111827',
+          padding: '16px',
+          color: '#fff',
+          background: 'green'
+      },
+      iconTheme: {
+          primary: 'white',
+          secondary: 'green',
+      },
+  })
+}
 
   const item = quizData.map((item) => (
     <>
@@ -127,9 +159,11 @@ if(!data?.user.isAdmin)
 
     const data = res.json();
     if (res.status == 200) {
-      console.log("user is deleted");
+      
+      displaySuccessToast("user is deleted");
     } else {
-      console.log("user not deleted");
+      
+      displayErrorToast("user not deleted")
     }
   };
   const promoteToAdmin = async (userId: String) => {
@@ -189,6 +223,10 @@ if(!data?.user.isAdmin)
           {/* Display user details and quizzes as needed */} {item}
         </div>
       </div>
+      <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
     </DashboardLayout>
   );
 };

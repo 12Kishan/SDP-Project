@@ -37,7 +37,7 @@ function CreateMcqQuiz() {
                 body = JSON.parse(reqStr)
                 const res = await axios.post('/api/quiz/sharedquiz', body)
                 if (res.status == 200) {
-                    console.log('my page', res);
+                    
                     setQuizObj(res.data.quizObj)
                     setQuestionArr(res.data.questionArr)
                     setLoading(false)

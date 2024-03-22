@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       );
     }
     // Log and return an error response if an exception occurs during email sending
-    console.log("The error is ", error);
+   
     return NextResponse.json({
       status: 500,
       message: "Something went wrong while sending the email.",

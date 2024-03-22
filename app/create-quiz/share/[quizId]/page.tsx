@@ -16,7 +16,7 @@ type Props = {
 
 export default function Page({ params: { quizId } }: Props) {
     const [mail, setMail] = useState<string[]>([])
-    const [link, setLink] = useState<string>(`http://localhost:3000/take-quiz/mcq/${quizId}`)
+    const [link, setLink] = useState<string>(`https://sdp-project-1.vercel.app/take-quiz/mcq/${quizId}`)
     const { data } = useSession()
     const [loading, setLoading] = useState(false)
 
@@ -157,7 +157,6 @@ export default function Page({ params: { quizId } }: Props) {
                         </div>
                     </div>
                 </div>
-                
             </div>
             <Toaster
                 position="top-right"

@@ -44,10 +44,10 @@ const [loading,setloading] = useState(true);
     });
 
     if (res.status == 200) {
-      console.log("user is deleted");
       displaySuccessToast("user is deleted");
     } else {
-      console.log("user not deleted");
+      displayErrorToast("user not deleted");
+      
     }
   };
 
@@ -98,7 +98,20 @@ const [loading,setloading] = useState(true);
         },
     })
 }
-
+const displayErrorToast = (str: string) => {
+  toast.error(str, {
+      style: {
+          border: '2px solid #111827',
+          padding: '16px',
+          color: '#fff',
+          background: 'red'
+      },
+      iconTheme: {
+          primary: 'white',
+          secondary: 'red',
+      },
+  })
+}
 
 
   const items = usersData.map((item) =>

@@ -62,7 +62,7 @@ export async function PUT(request:any, { params }:any) {
         })
 
     } catch (error) {
-        console.log(error)
+    
         return NextResponse.json({
             message: "user not updated",
             statusText:"User is not found"
@@ -74,7 +74,7 @@ export async function PUT(request:any, { params }:any) {
 export async function GET(req:any, { params }: { params: { userId: string } }){
     try {   
         
-        console.log(params);
+   
         const {userId} = params;
         const user = await User.findOne({_id:userId});
         return NextResponse.json(user , {

@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
         for (let email of payload.emails) {
             const validator = vine.compile(emailSchema);
-            console.log(email)
+        
             await validator.validate({ email })
         }
         const emailstring = payload.emails.join();
@@ -38,11 +38,11 @@ export async function POST(request: NextRequest) {
     }
     catch (error) {
         if (error instanceof errors.E_VALIDATION_ERROR) {
-            console.log(error);
+           
             return NextResponse.json({ status:400, errors: "Invalid URL" }, { status: 200 })
         }
         // Log and return an error response if an exception occurs during email sending
-        console.log("The error is ", error)
+        
         return NextResponse.json({ message: "Something went wrong while sending the email." }, { status: 500 })
     }
 }

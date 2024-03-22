@@ -53,9 +53,9 @@ export default function ReserPassword({
           password_confirmation: authState.cpassword,
         })
         .then((res) => {
-          console.log(res);
+ 
           const response = res.data;
-          console.log(response);
+     
           // Handle different response statuses
           if (response?.status == 400) {
             // Display warning toast for validation errors
@@ -74,7 +74,7 @@ export default function ReserPassword({
         .catch((err) => {
           // Handle and log errors
           setLoading(false);
-          console.log("err..", err);
+
         });
     } else {
       // Display warning toast for using a weak password

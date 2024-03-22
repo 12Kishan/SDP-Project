@@ -21,6 +21,8 @@ const quizSchema = new mongoose.Schema({
         enum: Object.values(QuizType),
         default: QuizType.MCQ,
     },
+    date: { type: Date, default: new Date() },
+    description: { type: String, default: '' },
     difficulty: {
         type: String,
         enum: Object.values(QuizDifficulty),
@@ -31,6 +33,17 @@ const quizSchema = new mongoose.Schema({
         virtuals: true,
     },
 });
+
+
+quizSchema.virtual('topicCount', {
+    ref: 'Quizzes',
+    localField: 'topic',
+    foreignField: 'topic',
+    count: true
+});
+
+
+
 
 const Quiz = mongoose.models.Quizzes || mongoose.model("Quizzes", quizSchema);
 

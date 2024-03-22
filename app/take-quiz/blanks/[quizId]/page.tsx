@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Loader from '@/app/components/Loader';
 import { useRouter } from 'next/navigation';
 import Blank from '@/app/components/quizComponent/Blank';
-
+import { useSession } from 'next-auth/react';
 
 type Props = {
   params: {
@@ -12,6 +12,7 @@ type Props = {
 }
 
 function BlankQuestionPage({ params: { quizId } }: Props) {
+  const { data } = useSession()
   const [quiz, setQuiz] = useState({})
   const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(true)
@@ -21,14 +22,13 @@ function BlankQuestionPage({ params: { quizId } }: Props) {
   //   return router.push('/dashboard/quiz')
   // }
   useEffect(() => {
-    fetch(`/api/question/${quizId}`)
+    fetch(`/api/questions/${quizId}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("data ", data)
+       
         setQuiz(data['quiz'])
         setQuestions(data['questions'])
-        console.log(quiz)
-        console.log(questions)
+    
         setLoading(false)
       })
   }, [])
@@ -36,7 +36,7 @@ function BlankQuestionPage({ params: { quizId } }: Props) {
   return <>
 
      { loading && <Loader /> }
-     { !loading && <><Blank quiz={quiz} questions={questions} /></> }
+     { !loading && <><Blank quiz={quiz} questions={questions} userId={data?.user.id} /></> }
   </>
 }
 

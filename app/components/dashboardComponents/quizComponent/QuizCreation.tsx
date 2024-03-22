@@ -51,7 +51,7 @@ function QuizCreation({ shared = false }: Props) {
             if (quizState.type === 'mcq') {
                 router.push("/create-quiz/mcq" + "?" + createQueryString("obj", JSON.stringify(quizState)));
             } else {
-
+                router.push("/create-quiz/blanks" + "?" + createQueryString("obj", JSON.stringify(quizState)));
             }
         } else {
             try {
@@ -65,7 +65,7 @@ function QuizCreation({ shared = false }: Props) {
 
                 if (response.status == 200) {
                     const data = await response.json();
-                    console.log(data)
+                 
                     const quizId = data.quizId
 
                     setLoading(false)
@@ -76,9 +76,7 @@ function QuizCreation({ shared = false }: Props) {
                         } else if (quizState.type === 'blanks') {
                             router.push(`/take-quiz/blanks/${quizId}`)
                         }
-                    } else {
-                        console.log(data)
-                    }
+                    } 
                 } else {
                     toast.error('Something went wrong', {
                         style: {

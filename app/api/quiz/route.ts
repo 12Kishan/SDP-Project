@@ -23,16 +23,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 error: 'You must be logged in.'
             }, { status: 401 })
         }
-        console.log('session checked')
+        
 
 
         const body = await req.json()
-        console.log('req. body: ', body)
+   
 
 
         const { amount, topic, type, difficulty } = quizSchema.parse(body)
 
-        console.log('before quiz')
+  
         const quiz = await Quiz.create({
             type: type || QuizType.MCQ,
             timeStarted: new Date(),
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             topic: topic,
             difficulty: difficulty || QuizDifficulty.Easy
         })
-        console.log('quiz created')
+    
 
         // fetching questions from our rest API
         const generatedQuestions = await axios.post(`${process.env.APP_URL}/api/questions`, {
@@ -69,14 +69,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 }
             })
             let mcqIdArr = []
-            console.log('MCQ array: ', mcqArray)
+          
             // storing mcq
             for (let mcq of mcqArray) {
                 let createdMCQ = await Question.create(mcq)
                 mcqIdArr.push(createdMCQ._id)
             }
             await Quiz.findByIdAndUpdate(quiz._id, {$push:{questions: {$each: mcqIdArr}}}, {new: true})
-            console.log('mcq created')
+           
         } else if (type === 'blanks') {
             type Blank = {
                 question: string
@@ -91,29 +91,29 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 }
             })
             let blankIdArr = []
-            console.log('blank array: ', blankArray)
+           
             // storing blanks
             for (let blank of blankArray) {
                 let createdBlank = await Question.create(blank)
                 blankIdArr.push(createdBlank._id)
             }
             await Quiz.findByIdAndUpdate(quiz._id, { $push: { questions: { $each: blankIdArr } } }, { new: true })
-            console.log('blanks created')
+            
         }
-        console.log('response here')
+     
         return NextResponse.json({
             quizId: quiz._id
         }, { status: 200 })
     } catch (err) {
         if (err instanceof ZodError) {
-            console.log(err.issues)
+      
             return NextResponse.json(
                 { error: err.issues, },
                 { status: 400 }
             )
         }
         //exception in questions fetching
-        console.log(err)
+   
         return NextResponse.json({
             error: err
         }, { status: 500 })

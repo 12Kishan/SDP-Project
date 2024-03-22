@@ -25,11 +25,10 @@ function MCQQuestionPage({ params: { quizId } }: Props) {
         fetch(`/api/questions/${quizId}`)
             .then((res) => res.json())
             .then((data) => {
-                console.log("data ", data)
+          
                 setQuiz(data['quiz'])
                 setQuestions(data['questions'])
-                console.log(quiz)
-                console.log(questions)
+              
                 setLoading(false)
             })
     }, [])

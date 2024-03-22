@@ -10,13 +10,13 @@ type Props = {
 
 async function GivenQuiz({ quizuser }: Props) {
     
-    console.log("this quiz ueer",quizuser)
+  
     const mainQuiz = await Quiz.findById({ _id: quizuser.quizId })
-    console.log("this is main quiz",mainQuiz)
+  
 
     return (
         <>
-            <div className="p-4 bg-gray-800 rounded-lg">
+            <div className="p-4 mb-4 bg-gray-800 rounded-lg">
                 <div className="flex items-center justify-between">
                     <div className="font-semibold text-xl">{mainQuiz?.topic}</div>
                     <div className="font-base text-gray-400">{quizuser.timeStarted?.getDate() + "/" + (quizuser.timeStarted?.getMonth() + 1) + "/" + quizuser.timeStarted?.getFullYear()}</div>

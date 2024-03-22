@@ -40,7 +40,7 @@ export async function DELETE(request: any, { params }: any) {
     try{
 
       
-        console.log(params);
+       
         const {quizId} = params;
         // Find quiz objects in QuizUsers based on quizId
         const quizUsers = await QuizUsers.find({ userId :quizId });
@@ -59,7 +59,7 @@ export async function DELETE(request: any, { params }: any) {
     }
     catch(error)
     {
-        console.log(error)
+     
         return NextResponse.json({
             message: "somthing went wrong",
             success: false

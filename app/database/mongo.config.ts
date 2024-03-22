@@ -5,8 +5,8 @@ export async function connect() {
         tls: true,
         ssl: true
     }).then(() => {
-        console.log("Connected...!")
+   
     }).catch((err) => {
-        console.log(err)
+
     })
 }

@@ -20,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse){
 
 
         const body = await req.json()
-        console.log('req. body: ', body)
+    
         const { amount, topic, type, difficulty } = quizSchema.parse(body)
 
         const generatedQuestions = await axios.post(`${process.env.APP_URL}/api/questions`, {
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest, res: NextResponse){
                     options: JSON.stringify(options)
                 }
             })
-            console.log(mcqArray)
+         
             return NextResponse.json({
                 quizObj: quizObj,
                 questionArr: mcqArray
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest, res: NextResponse){
                     answer: question.answer
                 }
             })
-            console.log(blankArray)
+         
             return NextResponse.json({
                 quizObj: quizObj,
                 questionArr: blankArray
@@ -78,14 +78,14 @@ export async function POST(req: NextRequest, res: NextResponse){
         }
     } catch (err) {
         if (err instanceof ZodError) {
-            console.log(err.issues)
+          
             return NextResponse.json(
                 { error: err.issues, },
                 { status: 400 }
             )
         }
         //exception in questions fetching
-        console.log(err)
+   
         return NextResponse.json({
             error: err
         }, { status: 500 })

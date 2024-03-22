@@ -12,7 +12,7 @@ connect();
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json()
-        console.log(body)
+     
         const validator = vine.compile(loginSchema)
         validator.errorReporter = () => new ErrorReporter()
         const output = await validator.validate(body)

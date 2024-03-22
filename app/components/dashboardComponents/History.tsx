@@ -18,14 +18,14 @@ async function History() {
     sharedQuizzes = await Quiz.find({ userId: session.user.id, shared: true })
   }
 
-  console.log(givenQuizzes)
+ 
 
   return (
     <>
       <div className='text-white md:flex lg:flex gap-x-5'>
         <div className='w-full'>
           <div className="font-semibold text-2xl mb-5">Given Quiz</div>
-          <div className="mb-6 md:p-6 lg:p-8 md:pb-0 lg:mb-0 bg-gray-900 w-full md:grid lg:grid md:grid-cols-2 lg:grid-cols-2 md:gap-3 lg:gap-4 md:rounded-l-2xl lg:rounded-l-2xl">
+          <div className="mb-6 p-4 md:p-6 lg:p-8 md:pb-0 lg:mb-0 bg-gray-900 w-full md:grid lg:grid md:grid-cols-2 lg:grid-cols-2 md:gap-3 lg:gap-4 md:rounded-l-2xl lg:rounded-l-2xl">
             {
               givenQuizzes?.map((quizuser: any, index:number) => (
                 <GivenQuiz key={index} quizuser={quizuser} />
@@ -35,7 +35,7 @@ async function History() {
         </div>
         <div className="w-full">
           <div className="font-semibold text-2xl mb-5">Shared Quiz</div>
-          <div className="mb-6 md:p-6 lg:p-8 md:pb-0 lg:mb-0 bg-gray-900 w-full md:grid lg:grid md:grid-cols-2 lg:grid-cols-2 md:gap-3 lg:gap-4 md:rounded-r-2xl lg:rounded-r-2xl">
+          <div className="mb-6 p-4 md:p-6 lg:p-8 md:pb-0 lg:mb-0 bg-gray-900 w-full md:grid lg:grid md:grid-cols-2 lg:grid-cols-2 md:gap-3 lg:gap-4 md:rounded-r-2xl lg:rounded-r-2xl">
             {
               sharedQuizzes.map((quiz: any, index: number) => (
                 <SharedQuiz key={index} quiz={quiz} />

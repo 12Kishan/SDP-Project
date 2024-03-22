@@ -25,7 +25,7 @@ export default function Page() {
         setLoading(false);
         const response = res.data;
 
-        console.log("this is respoce ", res);
+        
 
         // Handle different response statuses
         if (response.status == 200) {
@@ -53,7 +53,7 @@ export default function Page() {
         displayWarningToast("somthing went wrong");
         // Handle and log errors
         setLoading(false);
-        console.log("the error is ", err);
+   
       });
   };
 

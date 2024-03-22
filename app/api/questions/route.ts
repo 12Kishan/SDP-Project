@@ -12,7 +12,7 @@ export async function POST(req: Request, res: Response) {
 
         // destructure and validate request body
         const { amount, topic, type, difficulty } = quizSchema.parse(body)
-        console.log(amount + " " + difficulty + " " + topic + " " + type)
+        
         // if no exception validation succeed
         let questions: any
 
@@ -29,7 +29,7 @@ export async function POST(req: Request, res: Response) {
         try {
             questions = JSON.parse(questions)
         } catch (err) {
-            console.log('parse error')
+            
             return NextResponse.json({
                 message: 'server error'
             }, { status: 500 })
@@ -40,7 +40,7 @@ export async function POST(req: Request, res: Response) {
         }, { status: 200 })
     } catch (err) {
         if (err instanceof ZodError) {
-            console.log(err.issues)
+           
             return NextResponse.json(
                 { error: err.issues, },
                 { status: 400 }

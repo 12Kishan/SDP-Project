@@ -7,7 +7,7 @@ type Props = {
     questionUser: any
 }
 function QuestionTable({ questions, questionUser }: Props) {
-    console.log(questions);
+    
     return (
         <>
             <CTable>
@@ -27,8 +27,8 @@ function QuestionTable({ questions, questionUser }: Props) {
                                 <br />Correct Answer:
                                 <span className="font-semibold"> {question.answer}</span>
                             </CTableDataCell>
-                            <CTableDataCell className={`pl-4 ${questionUser[index].isCorrect ? 'text-green-600 font-semibold' : 'text-red-500 font-semibold'}`}>
-                                {questionUser[index].userAnswer}
+                            <CTableDataCell className={`pl-4 ${questionUser[index]?.isCorrect ? 'text-green-600 font-semibold' : 'text-red-500 font-semibold'}`}>
+                                {questionUser[index]?.userAnswer}
                             </CTableDataCell>
                         </CTableRow>
                     ))}

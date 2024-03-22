@@ -15,6 +15,7 @@ type Props = {
 
 export default function CreateBlanks({ quizObj, questionArr }: Props) {
   const router = useRouter();
+  const [submitLoading, setSubmitLoading] = useState(false)
   const [loading, setLoading] = useState(true);
   const [quiz, setQuiz] = useState({
     type: "",
@@ -24,6 +25,7 @@ export default function CreateBlanks({ quizObj, questionArr }: Props) {
   });
   const [questions, setQuestions] = useState([
     {
+      id: 0,
       questionType: "",
       question: "",
       answer: "",
@@ -33,103 +35,169 @@ export default function CreateBlanks({ quizObj, questionArr }: Props) {
   useEffect(() => {
     setQuestions(questionArr);
     setQuiz(quizObj);
-    console.log("useEffect called in crete mcq");
+    setQuestions((prev) =>
+    prev.map((item, index) => {
+        return { ...item, id: index };
+    })
+);
     setLoading(false);
   }, []);
 
   const handleQuestion = (id: number, question: string) => {
-    const new_data = questions.map((item, index) =>
-      index === id ? { ...item, question: question } : item
+    const new_data = questions.map((item) =>
+      item.id === id ? { ...item, question: question } : item
     );
     setQuestions(new_data);
   };
 
   const handleanswer = (id: number, newAnswer: any) => {
-    const new_data = questions.map((item, index) =>
-      index === id ? { ...item, answer: newAnswer } : item
+    const new_data = questions.map((item) =>
+      item.id === id ? { ...item, answer: newAnswer } : item
     );
 
     setQuestions(new_data);
   };
 
-  const handleSubmit = async (e:any)=>{
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const isEmptyQuestion = questions.some(
+      (question) => question.question.trim() === ""
+    );
+    if (isEmptyQuestion) {
+      alert("Please fill in all questions");
+      return;
+    }
 
-    e.preventDefault()
-        const isEmptyQuestion = questions.some(question => question.question.trim() === "");
-        if (isEmptyQuestion) {
-            alert("Please fill in all questions");
-            return;
-        }
+    const isEmptyAnswer = questions.some(
+      (question) => question.answer.trim() === ""
+    );
+    if (isEmptyAnswer) {
+      alert("Please fill the all answer");
+      return;
+    }
 
-        
-        const isEmptyAnswer = questions.some(question => question.answer.trim() === "");
-        if (isEmptyQuestion) {
-            alert("Please fill the all answer");
-            return;
-        }
+    const response = await axios.post("/api/quiz/savequiz", {
+      quizObj: quiz,
+      questionArr: questions,
+    });
 
-        const response = await axios.post('/api/quiz/savequiz',{
-            quizObj:quiz,
-            questionArr:questions
-        })
+    if (response.status == 200) {
+      const quizId = response.data.quizId;
+      router.push(`/take-quiz/blanks/${quizId}`);
+    }
+  };
 
-        if(response.status==200)
-        {
-            const quizId=response.data.quizId;
-            router.push(`/take-quiz/mcq/${quizId}`)
-        }
-
-  }
+  const handleDelete = (indexOfQuestion: number) => {
+    const newQuestions = questions.filter(
+      (item, index) => index !== indexOfQuestion
+    );
+    setQuestions(newQuestions);
+  };
 
   return (
     <>
       {loading && <Loader />}
-      {!loading && <>
-      
-        <Card className="bg-gray-900 p-4 md:p-7 lg:p-7 m-20 rounded-3xl">
-                        <div className=" justify-center">
-                            <div className="text-white text-2xl justify-center text-center">
-                                Create Quiz
-                            </div>
-                            <hr className="text-white" />
-                            <br />
+      {!loading && (
+        <>
+          <Card className="bg-gray-700 p-2 md:p-4 lg:p-5 m-7 rounded-3xl ">
+            <div className="text-white text-3xl font-bold justify-center p-3 ">
+              Create Blanks
+            </div>
 
-                            {questions.map((question, questionIndex) => (
-                                <>
-                                    <div className=" text-white">Question:{questionIndex + 1}</div>
-                                    <textarea required
-                                        className="w-full rounded-md p-2 m-3"
-                                        defaultValue={question.question}
-                                        onChange={(e) =>handleQuestion(questionIndex, e.target.value)}
-                                    />
-                                    <br />
-                                    <input
-                                    key={questionIndex}
-                                    required
-                                    
-                                    className="rounded-md p-2 m-3"
-                                    defaultValue={question.answer}
-                                    onChange={(e) =>handleanswer(questionIndex, e.target.value)}
-                                    />
-                                    <br />
-                                </>
-                            ))}
+            <div className=" justify-center bg-gray-900 p-3 rounded-3xl ">
+              <div className="text-white text-xs md:text-base lg:text-lg p-3 ">
+                <div className="font-semibold mb-3">Instructions</div>
+                <div>
+                  <li>
+                  Write only the correct answer, highlighted in green for clarity.
+                  </li>
+             
+                  <li>
+                    Ensure all fields, including questions and answer, are
+                    filled; no blanks allowed.
+                  </li>
+                 
+                  <li>
+                    Use the remove button to delete questions entirely if
+                    necessary.
+                  </li>
+                </div>
+              </div>
 
-                            {/* add the button here */}
-                            <div className="flex justify-center items-center mt-4 ">
-                                <Link href="/" className="text-center">
-                                    <button
-                                        className="mt-1 mx-2 block px-2 py-3 text-white font-bold bg-gray-900 rounded-full border-solid border-2 hover:bg-white hover:text-gray-900 sm:ml-2 dm:mt-5 text-center"
-                                        onClick={(e)=>{handleSubmit(e)}}
-                                    >
-                                        Submit
-                                    </button>
-                                </Link>
-                            </div>
-                        </div>
-                    </Card>
-      </>}
-      
+              <br />
+
+              <div className="rounded-lg bg-gray-700 p-3">
+                {questions.map((question, questionIndex) => (
+                  <>
+                    <div className="text-white flex justify-between mb-2 mt-3">
+                      <div className=" text-white font-semibold">
+                        Question : {questionIndex + 1}
+                      </div>
+
+                      <button
+                        key={question.id}
+                        className="hover:text-red-500"
+                        onClick={(e) => handleDelete(question.id)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                    <textarea
+                      required
+                      className="w-full text-black rounded-md p-2 text-wrap"
+                      defaultValue={question.question}
+                      onChange={(e) =>
+                        handleQuestion(question.id, e.target.value)
+                      }
+                    />
+                    <br />
+
+                    <div
+                      key={question.id}
+                      className={`flex items-center justify-around gap-1`}
+                    >
+                      <p className="hidden sm:block lg:block md:block text-white">
+                        <div className="justify-end">Answer</div>
+                      </p>
+
+                      <input
+                        key={questionIndex}
+                        required
+                        className={`rounded-md m-2 w-full p-2 mx-3 ${
+                          question.answer.trim() === question.answer.trim()
+                            ? "bg-green-500"
+                            : ""
+                        }
+${question.answer.trim() === "" ? "bg-red-500" : ""}`}
+                        defaultValue={question.answer}
+                        onChange={(e) =>
+                          handleanswer(question.id, e.target.value)
+                        }
+                      />
+                    </div>
+                  </>
+                ))}
+              </div>
+              {/* add the button here */}
+              <div className="flex justify-center items-center mt-4 ">
+            
+                  <button
+                    className="bg-gray-700 px-18 md:px-25 lg:px-32 p-3 text-white gap-x-2 flex users-center justify-center rounded-xl hover:bg-gray-800 disabled:bg-gray-800"
+                    disabled = {submitLoading}
+                    
+                    onClick={(e) => {
+                      setSubmitLoading(true)
+                      handleSubmit(e);
+                    }}
+                  >
+                   {submitLoading ? 'Saving Quiz...' : 'Submit'}
+                  </button>
+          
+              </div>
+            </div>
+          </Card>
+        </>
+      )}
     </>
   );
 }

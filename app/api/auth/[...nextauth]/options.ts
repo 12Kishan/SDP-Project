@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
                     token.isAdmin = tokenUser.isAdmin
                 }
             }
-            console.log(`token : `, token)
+         
             // console.log("both :", { ...token, ...user })
             return token;
         },
@@ -52,12 +52,12 @@ export const authOptions: NextAuthOptions = {
             const user = await User.findOne({ email: session.user?.email })
             session.user.isAdmin = user.isAdmin
             session.user.id = user._id
-            console.log('session : ', session)
+        
             return session
         },
         async signIn({ user, account, profile, email, credentials }) {
             try {
-                console.log(profile)
+              
                 const findUser = await User.findOne({ email: user.email })
                 if (findUser) {
                     return true;
@@ -68,7 +68,7 @@ export const authOptions: NextAuthOptions = {
                 })
                 return true
             } catch (error) {
-                console.log("error in google signin : ", error)
+                
                 return false
             }
         },
@@ -89,7 +89,7 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials, req) {
                 connect()
-                console.log(credentials?.email)
+               
                 const user = await User.findOne({ email: credentials?.email })
                 if (user) {
                     return user

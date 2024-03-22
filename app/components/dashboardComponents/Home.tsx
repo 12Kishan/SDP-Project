@@ -17,6 +17,9 @@ import {
 import { Image } from '@chakra-ui/react'
 
 
+
+
+
 function Home() {
 
   const { data } = useSession()
