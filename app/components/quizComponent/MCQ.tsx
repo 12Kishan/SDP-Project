@@ -262,7 +262,7 @@ function MCQ({ quiz, questions, userId }: Props) {
   }
 
   let expiryTimestamp = new Date();
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 30);
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 600);
 
   useEffect(() => {
     if (startTime === null) {
