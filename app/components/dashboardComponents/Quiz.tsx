@@ -21,6 +21,7 @@ import { Quiz } from "@/app/model/quiz";
 
 async function Quizes() {
   const trendingTopics = await Quiz.aggregate([
+    { $project: { topic: { $toUpper: "$topic" } } },
     { $group: { _id: "$topic", count: { $sum: 1 } } },
     { $sort: { count: -1 } },
     { $limit: 5 },
