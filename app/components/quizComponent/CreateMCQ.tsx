@@ -132,6 +132,13 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
         }
     };
 
+    
+    const handleResize = (event:any) => {
+        const textarea = event.target;
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+      };
+
     return (
         <>
             {loading && <Loader />}
@@ -204,11 +211,13 @@ function CreateMCQ({ quizObj, questionArr }: Props) {
                                             </div>
                                             <textarea
                                                 required
-                                                className="w-full rounded-md p-2 text-wrap"
+                                                value={question.question}
                                                 defaultValue={question.question}
                                                 onChange={(e) =>
                                                     handleQuestion(questionIndex, e.target.value)
                                                 }
+                                                className="resize-none rounded-md overflow-hidden w-full p-2 text-wrap"
+                                                onInput={handleResize}
                                             />
                                             <br />
                                             <div className="text-center flex-col-reverse mt-3">

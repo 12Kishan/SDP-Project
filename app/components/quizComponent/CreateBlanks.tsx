@@ -15,6 +15,7 @@ type Props = {
 
 export default function CreateBlanks({ quizObj, questionArr }: Props) {
   const router = useRouter();
+  const [QuizId, setQuizId] = useState("");
   const [submitLoading, setSubmitLoading] = useState(false)
   const [loading, setLoading] = useState(true);
   const [quiz, setQuiz] = useState({
@@ -83,15 +84,28 @@ export default function CreateBlanks({ quizObj, questionArr }: Props) {
 
     if (response.status == 200) {
       const quizId = response.data.quizId;
-      router.push(`/take-quiz/blanks/${quizId}`);
+      setQuizId(quizId);
     }
   };
+
+
+  useEffect(() => {
+    if (QuizId !== "") {
+        router.push(`/create-quiz/share/${QuizId}`);
+    }
+}, [QuizId]);
 
   const handleDelete = (indexOfQuestion: number) => {
     const newQuestions = questions.filter(
       (item, index) => index !== indexOfQuestion
     );
     setQuestions(newQuestions);
+  };
+
+  const handleResize = (event:any) => {
+    const textarea = event.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
   };
 
   return (
@@ -144,11 +158,13 @@ export default function CreateBlanks({ quizObj, questionArr }: Props) {
                     </div>
                     <textarea
                       required
-                      className="w-full text-black rounded-md p-2 text-wrap"
+                      value={question.question}
+                      className="w-full text-black overflow-hidden resize-none rounded-md p-2 text-wrap"
                       defaultValue={question.question}
                       onChange={(e) =>
                         handleQuestion(question.id, e.target.value)
                       }
+                      onInput={handleResize}
                     />
                     <br />
 
