@@ -55,7 +55,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
 
     if (index == 0) {
-        const quizUser = await QuizUsers.findOne({ quizId: quizId, userId: userId, timeTaken:timeTaken })
+        const quizUser = await QuizUsers.findOne({ quizId: quizId, userId: userId })
       if(!quizUser){
         await QuizUsers.create({
             quizId,
@@ -85,9 +85,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     // )
 
     if (question.questionType === "mcq") {
-      const isCorrect =
-        question.answer.toLowerCase().trim() ===
-        userAnswer.toLowerCase().trim();
+      const isCorrect = (question.answer.toLowerCase().trim() === userAnswer.toLowerCase().trim());
 
       const record = await QuestionUser.findOne({
         questionId: questionId,
