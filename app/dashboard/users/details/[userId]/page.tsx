@@ -121,7 +121,7 @@ const displaySuccessToast = (str: string) => {
         >
           <div className="text-xl px-3">{item.topic}</div>
           <div>
-            <Link href={"/statistics/${userId}/${item._id}"}>
+            <Link href={`/statistics/${userId}/${item._id}`}>
               <Button
                 className="my-2 mx-3 text-xs md:text-base lg:text-lgitems-center text-white justify-center gap-x-2 bg-gray-900 p-2 rounded-md hover:bg-gray-700"
                 onClick={() => {
