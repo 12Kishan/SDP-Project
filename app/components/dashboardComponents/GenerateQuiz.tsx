@@ -40,7 +40,7 @@ async function GenerateQuiz() {
           <Center>
             <Card
               align={"center"}
-              className="rounded-lg w-full mx-5 md:mx-15  gap-4 py-3 shadow-xl text-white md:flex lg:flex gap-x-5 bg-gray-900"
+              className="rounded-lg w-full md:mx-15  gap-4 py-3 shadow-xl text-white md:flex lg:flex gap-x-5 bg-gray-900"
             >
               <CardHeader className="font-extrabold text-white">
                 <Heading
